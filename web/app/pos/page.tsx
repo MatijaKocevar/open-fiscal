@@ -1,9 +1,10 @@
 import { Suspense } from "react"
-import { getAvailableProducts } from "@/lib/queries/products"
 import { Skeleton } from "@/components/ui/skeleton"
 import { ProductGrid } from "./_components/product-grid"
 import { ProductGridSkeleton } from "./_components/product-grid-skeleton"
 import { PosCart } from "./_components/cart"
+
+export const dynamic = "force-dynamic"
 
 export default function PosPage() {
   return (

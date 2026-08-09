@@ -3,6 +3,8 @@ import { getAllCustomers } from "@/lib/queries/customers"
 import { Skeleton } from "@/components/ui/skeleton"
 import Link from "next/link"
 
+export const dynamic = "force-dynamic"
+
 async function CustomerList() {
   const customers = await getAllCustomers()
 

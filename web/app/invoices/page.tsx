@@ -4,6 +4,8 @@ import { Skeleton } from "@/components/ui/skeleton"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 
+export const dynamic = "force-dynamic"
+
 async function InvoiceTable() {
   const invoices = await getRecentInvoices(50)
 

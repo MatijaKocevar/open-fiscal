@@ -1,6 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { db } from "@/lib/db"
 
+export const dynamic = "force-dynamic"
+
 export default async function AdminPage() {
   const company = await db.company.findFirst()
   const [premises, devices] = await Promise.all([

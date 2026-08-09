@@ -4,6 +4,8 @@ import { Badge } from "@/components/ui/badge"
 import { ResendButton } from "./_components/invoice-detail"
 import { notFound } from "next/navigation"
 
+export const dynamic = "force-dynamic"
+
 export default async function InvoiceDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const invoice = await getInvoiceById(id)
