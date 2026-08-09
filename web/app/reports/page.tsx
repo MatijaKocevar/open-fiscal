@@ -38,58 +38,58 @@ export default async function ReportsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Poročila</h1>
+      <h1 className="text-2xl font-bold">Reports</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted-foreground">Danes</CardTitle>
+            <CardTitle className="text-sm text-muted-foreground">Today</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold tabular-nums">{todayGross.toFixed(2)} €</div>
-            <p className="text-xs text-muted-foreground">DDV: {todayVat.toFixed(2)} € | Računov: {todayInvoices.length}</p>
+            <p className="text-xs text-muted-foreground">VAT: {todayVat.toFixed(2)} € | Invoices: {todayInvoices.length}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted-foreground">Ta mesec</CardTitle>
+            <CardTitle className="text-sm text-muted-foreground">This month</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold tabular-nums">{monthGross.toFixed(2)} €</div>
-            <p className="text-xs text-muted-foreground">DDV: {monthVat.toFixed(2)} € | Računov: {monthInvoices.length}</p>
+            <p className="text-xs text-muted-foreground">VAT: {monthVat.toFixed(2)} € | Invoices: {monthInvoices.length}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted-foreground">Povprečni račun</CardTitle>
+            <CardTitle className="text-sm text-muted-foreground">Average invoice</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold tabular-nums">
               {monthInvoices.length > 0 ? (monthGross / monthInvoices.length).toFixed(2) : "0.00"} €
             </div>
-            <p className="text-xs text-muted-foreground">Ta mesec</p>
+            <p className="text-xs text-muted-foreground">This month</p>
           </CardContent>
         </Card>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Mesečni DDV</CardTitle>
+          <CardTitle className="text-lg">Monthly VAT</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
             <div className="flex justify-between text-sm border-b pb-2">
-              <span>Neto</span>
+              <span>Net</span>
               <span className="tabular-nums font-medium">{monthNet.toFixed(2)} €</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span>DDV</span>
+              <span>VAT</span>
               <span className="tabular-nums font-medium">{monthVat.toFixed(2)} €</span>
             </div>
             <div className="flex justify-between text-base font-bold border-t pt-2">
-              <span>Bruto</span>
+              <span>Gross</span>
               <span className="tabular-nums">{monthGross.toFixed(2)} €</span>
             </div>
           </div>
@@ -98,7 +98,7 @@ export default async function ReportsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Načini plačila (ta mesec)</CardTitle>
+          <CardTitle className="text-lg">Payment methods (this month)</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
@@ -109,7 +109,7 @@ export default async function ReportsPage() {
               </div>
             ))}
             {Object.keys(paymentBreakdown).length === 0 && (
-              <p className="text-muted-foreground text-sm">Ni podatkov</p>
+              <p className="text-muted-foreground text-sm">No data</p>
             )}
           </div>
         </CardContent>

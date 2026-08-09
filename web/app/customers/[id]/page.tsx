@@ -16,16 +16,16 @@ export default async function CustomerDetailPage({ params }: { params: Promise<{
       <h1 className="text-2xl font-bold">{customer.name}</h1>
       <Card>
         <CardContent className="py-4 space-y-2 text-sm">
-          {customer.vatId && <p>Davčna: {customer.vatId}</p>}
-          {customer.address && <p>Naslov: {customer.address}</p>}
-          {customer.city && <p>Mesto: {customer.postalCode} {customer.city}</p>}
-          {customer.phone && <p>Telefon: {customer.phone}</p>}
+          {customer.vatId && <p>Tax: {customer.vatId}</p>}
+          {customer.address && <p>Address: {customer.address}</p>}
+          {customer.city && <p>City: {customer.postalCode} {customer.city}</p>}
+          {customer.phone && <p>Phone: {customer.phone}</p>}
           {customer.email && <p>Email: {customer.email}</p>}
         </CardContent>
       </Card>
       {customer.invoices.length > 0 && (
         <div>
-          <h2 className="text-lg font-semibold mb-2">Računi</h2>
+          <h2 className="text-lg font-semibold mb-2">Invoices</h2>
           <div className="border rounded-lg divide-y">
             {customer.invoices.map((inv) => (
               <Link

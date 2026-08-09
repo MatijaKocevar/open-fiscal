@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache"
 export async function updateCustomer(id: string, formData: unknown) {
   const parsed = CustomerUpdateSchema.safeParse(formData)
   if (!parsed.success) {
-    return { ok: false as const, error: parsed.error.issues[0]?.message || "Neveljavni podatki" }
+    return { ok: false as const, error: parsed.error.issues[0]?.message || "Invalid data" }
   }
 
   await db.customer.update({

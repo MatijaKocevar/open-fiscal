@@ -9,7 +9,7 @@ import { revalidatePath } from "next/cache"
 export async function checkout(formData: unknown) {
   const parsed = InvoiceCreateSchema.safeParse(formData)
   if (!parsed.success) {
-    return { ok: false as const, error: parsed.error.issues[0]?.message || "Neveljavni podatki" }
+    return { ok: false as const, error: parsed.error.issues[0]?.message || "Invalid data" }
   }
 
   const { paymentMethod, customerId, items } = parsed.data
@@ -21,7 +21,7 @@ export async function checkout(formData: unknown) {
   const premise = await db.premise.findFirst({ where: { isActive: true } })
 
   if (!company || !device || !premise) {
-    return { ok: false as const, error: "Podjetje ni v celoti nastavljeno. Obiščite nastavitve." }
+    return { ok: false as const, error: "Account not fully configured. Visit settings." }
   }
 
   const lastInvoice = await db.invoice.findFirst({ orderBy: { invoiceNumber: "desc" } })
@@ -82,7 +82,7 @@ export async function checkout(formData: unknown) {
 
     return { ok: true as const, data: { invoiceId: invoice.id, invoiceNumber } }
   } catch (error) {
-    const msg = error instanceof Error ? error.message : "Napaka pri fiskalizaciji"
+    const msg = error instanceof Error ? error.message : "Fiscalization error"
     return { ok: false as const, error: msg }
   }
 }

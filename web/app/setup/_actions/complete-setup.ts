@@ -1,5 +1,6 @@
 "use server"
 
+import bcrypt from "bcryptjs"
 import { db } from "@/lib/db"
 import { redirect } from "next/navigation"
 import { SetupCompleteSchema } from "@/schemas/settings"
@@ -7,7 +8,7 @@ import { SetupCompleteSchema } from "@/schemas/settings"
 export async function completeSetup(formData: unknown) {
   const parsed = SetupCompleteSchema.safeParse(formData)
   if (!parsed.success) {
-    return { ok: false as const, error: parsed.error.issues[0]?.message || "Neveljavni podatki" }
+    return { ok: false as const, error: parsed.error.issues[0]?.message || "Invalid data" }
   }
 
   const data = parsed.data
@@ -59,6 +60,18 @@ export async function completeSetup(formData: unknown) {
       premiseId: data.premiseId,
     },
   })
+
+  if (data.adminEmail && data.adminPassword) {
+    const passwordHash = await bcrypt.hash(data.adminPassword, 12)
+    await db.user.create({
+      data: {
+        email: data.adminEmail,
+        passwordHash,
+        name: "Admin",
+        role: "OWNER",
+      },
+    })
+  }
 
   redirect("/login")
 }

@@ -12,29 +12,29 @@ export function ResendButton({ invoiceId }: { invoiceId: string }) {
 
   async function handleResend() {
     if (!email) {
-      showError("Vnesite email naslov")
+      showError("Enter email address")
       return
     }
     setLoading(true)
     const result = await resendReceipt(invoiceId, email)
     setLoading(false)
-    if (result.ok) showSuccess("Račun poslan!")
+    if (result.ok) showSuccess("Invoice sent!")
     else showError(result.error)
   }
 
   return (
     <div className="flex gap-2 items-end">
       <div className="flex-1">
-        <label className="text-sm text-muted-foreground">Pošlji račun na email</label>
+        <label className="text-sm text-muted-foreground">Send invoice to email</label>
         <Input
           type="email"
-          placeholder="stranka@email.com"
+          placeholder="customer@email.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
       </div>
       <Button onClick={handleResend} disabled={loading}>
-        {loading ? "Pošiljam..." : "Pošlji"}
+        {loading ? "Sending..." : "Send"}
       </Button>
     </div>
   )

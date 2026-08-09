@@ -4,27 +4,19 @@ import type { NextRequest } from "next/server"
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Allow setup wizard without auth
-  if (pathname.startsWith("/setup")) {
-    return NextResponse.next()
-  }
+  const publicPaths = ["/setup", "/login", "/api/auth"]
+  const isPublic = publicPaths.some((p) => pathname.startsWith(p))
+    || pathname.startsWith("/_next")
+    || pathname.startsWith("/api/bridge")
+    || pathname.match(/\.(ico|png|svg|jpg|jpeg|webp|json)$/)
 
-  // Allow login page without auth
-  if (pathname.startsWith("/login")) {
-    return NextResponse.next()
-  }
+  const token = request.cookies.get("authjs.session-token")?.value
+    || request.cookies.get("__Secure-authjs.session-token")?.value
 
-  // Allow assets without auth
-  if (
-    pathname.startsWith("/_next") ||
-    pathname.startsWith("/api/bridge") ||
-    pathname.startsWith("/api/auth") ||
-    pathname.startsWith("/api/print") ||
-    pathname.startsWith("/api/upload") ||
-    pathname.startsWith("/api/invoice") ||
-    pathname.match(/\.(ico|png|svg|jpg|jpeg|webp|json)$/)
-  ) {
-    return NextResponse.next()
+  if (!token && !isPublic) {
+    const loginUrl = new URL("/login", request.url)
+    loginUrl.searchParams.set("callbackUrl", pathname)
+    return NextResponse.redirect(loginUrl)
   }
 
   return NextResponse.next()

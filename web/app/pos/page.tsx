@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic"
 export default function PosPage() {
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold">Blagajna</h1>
+      <h1 className="text-2xl font-bold">POS</h1>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
           <Suspense fallback={<ProductGridSkeleton />}>

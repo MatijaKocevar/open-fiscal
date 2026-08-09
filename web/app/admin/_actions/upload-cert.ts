@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache"
 
 export async function uploadCert(formData: FormData) {
   const file = formData.get("cert") as File
-  if (!file) return { ok: false as const, error: "Datoteka ni bila naložena" }
+  if (!file) return { ok: false as const, error: "File was not uploaded" }
 
   const buffer = Buffer.from(await file.arrayBuffer())
   const certPath = path.join(process.cwd(), "..", "certs", file.name)

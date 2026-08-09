@@ -30,6 +30,8 @@ export const SetupCompleteSchema = CompanyInfoSchema.extend({
   deviceId: z.string().min(1),
   deviceName: z.string().min(1),
   certPassword: z.string().optional(),
+  adminEmail: z.string().email().optional(),
+  adminPassword: z.string().min(6).optional(),
 })
 
 export type SmtpConfig = z.infer<typeof SmtpConfigSchema>

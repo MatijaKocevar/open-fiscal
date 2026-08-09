@@ -7,7 +7,7 @@ export async function ProductGrid() {
   if (products.length === 0) {
     return (
       <div className="text-center py-12 text-muted-foreground border rounded-lg">
-        Ni izdelkov. Dodajte izdelke v katalog.
+        No products. Add products to catalog.
       </div>
     )
   }

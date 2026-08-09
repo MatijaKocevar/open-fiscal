@@ -10,10 +10,10 @@ export async function resendReceipt(invoiceId: string, email: string) {
     include: { items: true, customer: true },
   })
 
-  if (!invoice) return { ok: false as const, error: "Račun ne obstaja" }
+  if (!invoice) return { ok: false as const, error: "Invoice not found" }
 
   const company = await db.company.findFirst()
-  if (!company) return { ok: false as const, error: "Podjetje ni nastavljeno" }
+  if (!company) return { ok: false as const, error: "Company not set up" }
 
   try {
     const pdf = await generateReceiptPdf({
@@ -43,7 +43,7 @@ export async function resendReceipt(invoiceId: string, email: string) {
       verifyUrl: invoice.verifyUrl || undefined,
     })
 
-    await sendReceipt(email, `Račun #${invoice.invoiceNumber}`, pdf)
+    await sendReceipt(email, `Invoice #${invoice.invoiceNumber}`, pdf)
 
     await db.invoice.update({
       where: { id: invoiceId },
@@ -52,7 +52,7 @@ export async function resendReceipt(invoiceId: string, email: string) {
 
     return { ok: true as const }
   } catch (error) {
-    const msg = error instanceof Error ? error.message : "Napaka pri pošiljanju"
+    const msg = error instanceof Error ? error.message : "Send error"
     return { ok: false as const, error: msg }
   }
 }

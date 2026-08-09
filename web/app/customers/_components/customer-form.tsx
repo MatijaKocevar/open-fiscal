@@ -38,18 +38,18 @@ export function CustomerForm({ customer }: Props) {
     if (!result.ok) {
       showError(result.error)
     } else {
-      showSuccess("Stranka posodobljena")
+      showSuccess("Customer updated")
       router.push("/customers")
     }
   }
 
   async function handleDelete() {
-    if (!confirm("Izbriši stranko?")) return
+    if (!confirm("Delete customer?")) return
     setDeleting(true)
     const result = await deleteCustomer(customer.id)
     setDeleting(false)
     if (result.ok) {
-      showSuccess("Stranka izbrisana")
+      showSuccess("Customer deleted")
       router.push("/customers")
     } else {
       showError(result.error)
@@ -59,29 +59,29 @@ export function CustomerForm({ customer }: Props) {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <label className="text-sm font-medium">Ime *</label>
+        <label className="text-sm font-medium">Name *</label>
         <Input value={name} onChange={(e) => setName(e.target.value)} />
       </div>
       <div className="space-y-2">
-        <label className="text-sm font-medium">Davčna številka</label>
+        <label className="text-sm font-medium">Tax number</label>
         <Input value={vatId} onChange={(e) => setVatId(e.target.value)} />
       </div>
       <div className="space-y-2">
-        <label className="text-sm font-medium">Naslov</label>
+        <label className="text-sm font-medium">Address</label>
         <Input value={address} onChange={(e) => setAddress(e.target.value)} />
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <label className="text-sm font-medium">Mesto</label>
+          <label className="text-sm font-medium">City</label>
           <Input value={city} onChange={(e) => setCity(e.target.value)} />
         </div>
         <div className="space-y-2">
-          <label className="text-sm font-medium">Poštna številka</label>
+          <label className="text-sm font-medium">Postal code</label>
           <Input value={postalCode} onChange={(e) => setPostalCode(e.target.value)} />
         </div>
       </div>
       <div className="space-y-2">
-        <label className="text-sm font-medium">Telefon</label>
+        <label className="text-sm font-medium">Phone</label>
         <Input value={phone} onChange={(e) => setPhone(e.target.value)} />
       </div>
       <div className="space-y-2">
@@ -90,10 +90,10 @@ export function CustomerForm({ customer }: Props) {
       </div>
       <div className="flex justify-between pt-2">
         <Button variant="destructive" onClick={handleDelete} disabled={deleting}>
-          {deleting ? "Brisanje..." : "Izbriši"}
+          {deleting ? "Deleting..." : "Delete"}
         </Button>
         <Button onClick={handleSave} disabled={loading}>
-          {loading ? "Shranjevanje..." : "Shrani"}
+          {loading ? "Saving..." : "Save"}
         </Button>
       </div>
     </div>

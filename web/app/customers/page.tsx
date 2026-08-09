@@ -11,7 +11,7 @@ async function CustomerList() {
   if (customers.length === 0) {
     return (
       <div className="text-center py-12 text-muted-foreground border rounded-lg">
-        Ni strank. Dodajte prvo stranko.
+        No customers. Add first customer.
       </div>
     )
   }
@@ -42,7 +42,7 @@ async function CustomerList() {
 export default function CustomersPage() {
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold">Stranke</h1>
+      <h1 className="text-2xl font-bold">Customers</h1>
       <Suspense fallback={<Skeleton className="h-48 w-full" />}>
         <CustomerList />
       </Suspense>

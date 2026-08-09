@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache"
 export async function createAppointment(formData: unknown) {
   const parsed = AppointmentCreateSchema.safeParse(formData)
   if (!parsed.success) {
-    return { ok: false as const, error: parsed.error.issues[0]?.message || "Neveljavni podatki" }
+    return { ok: false as const, error: parsed.error.issues[0]?.message || "Invalid data" }
   }
 
   await db.appointment.create({

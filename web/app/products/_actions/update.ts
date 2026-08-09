@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache"
 export async function updateProduct(id: string, formData: unknown) {
   const parsed = ProductUpdateSchema.safeParse(formData)
   if (!parsed.success) {
-    return { ok: false as const, error: parsed.error.issues[0]?.message || "Neveljavni podatki" }
+    return { ok: false as const, error: parsed.error.issues[0]?.message || "Invalid data" }
   }
 
   await db.product.update({

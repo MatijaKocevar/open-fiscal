@@ -14,7 +14,7 @@ async function RecentInvoicesList() {
     return (
       <Card>
         <CardContent className="py-8 text-center text-muted-foreground">
-          Ni računov. Ustvarite prvi račun na blagajni.
+          No invoices. Create your first invoice at POS.
         </CardContent>
       </Card>
     )
@@ -30,7 +30,7 @@ async function RecentInvoicesList() {
           </div>
           <div className="flex items-center gap-3">
             <Badge variant={inv.fiscalNumber ? "default" : "outline"}>
-              {inv.fiscalNumber ? "Fiskaliziran" : "Brez EOR"}
+              {inv.fiscalNumber ? "Fiscalized" : "No EOR"}
             </Badge>
             <span className="font-medium tabular-nums">{Number(inv.totalGross).toFixed(2)} €</span>
           </div>
@@ -43,41 +43,41 @@ async function RecentInvoicesList() {
 export default function DashboardPage() {
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Nadzorna plošča</h1>
+      <h1 className="text-2xl font-bold">Dashboard</h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Link href="/pos">
           <Card className="hover:bg-accent/50 transition-colors cursor-pointer">
             <CardHeader>
-              <CardTitle className="text-lg">🛒 Blagajna</CardTitle>
+              <CardTitle className="text-lg">🛒 POS</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">Nov račun, gotovina, kartica</p>
+              <p className="text-sm text-muted-foreground">New invoice, cash, card</p>
             </CardContent>
           </Card>
         </Link>
         <Link href="/invoices">
           <Card className="hover:bg-accent/50 transition-colors cursor-pointer">
             <CardHeader>
-              <CardTitle className="text-lg">🧾 Računi</CardTitle>
+              <CardTitle className="text-lg">🧾 Invoices</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">Pregled vseh izdanih računov</p>
+              <p className="text-sm text-muted-foreground">Overview of all issued invoices</p>
             </CardContent>
           </Card>
         </Link>
         <Link href="/reports">
           <Card className="hover:bg-accent/50 transition-colors cursor-pointer">
             <CardHeader>
-              <CardTitle className="text-lg">📈 Poročila</CardTitle>
+              <CardTitle className="text-lg">📈 Reports</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">DDV, dnevni promet</p>
+              <p className="text-sm text-muted-foreground">VAT, daily revenue</p>
             </CardContent>
           </Card>
         </Link>
       </div>
 
-      <h2 className="text-lg font-semibold">Zadnji računi</h2>
+      <h2 className="text-lg font-semibold">Latest invoices</h2>
       <Suspense fallback={<Skeleton className="h-48 w-full" />}>
         <RecentInvoicesList />
       </Suspense>

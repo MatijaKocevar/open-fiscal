@@ -19,12 +19,12 @@ export default async function SchedulePage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold">Urnik — {now.toLocaleDateString("sl-SI", { weekday: "long", day: "numeric", month: "long" })}</h1>
+      <h1 className="text-2xl font-bold">Schedule — {now.toLocaleDateString("sl-SI", { weekday: "long", day: "numeric", month: "long" })}</h1>
 
       {appointments.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center text-muted-foreground">
-            Danes ni terminov.
+            No appointments today.
           </CardContent>
         </Card>
       ) : (
@@ -40,7 +40,7 @@ export default async function SchedulePage() {
                   {a.notes && <div className="text-xs text-muted-foreground mt-1">{a.notes}</div>}
                 </div>
                 <Badge variant={a.isCancelled ? "destructive" : "default"}>
-                  {a.isCancelled ? "Preklican" : "Potrjen"}
+                  {a.isCancelled ? "Cancelled" : "Confirmed"}
                 </Badge>
               </CardContent>
             </Card>

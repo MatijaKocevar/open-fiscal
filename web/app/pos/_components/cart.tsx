@@ -43,7 +43,7 @@ export function PosCart() {
     setLoading(false)
 
     if (result.ok) {
-      showSuccess("Račun fiskaliziran!")
+      showSuccess("Invoice fiscalized!")
       clear()
       router.push(`/invoices/${result.data.invoiceId}`)
     } else {
@@ -54,11 +54,11 @@ export function PosCart() {
   return (
     <Card>
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg">Košarica</CardTitle>
+        <CardTitle className="text-lg">Cart</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         {items.length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-4">Košarica je prazna</p>
+          <p className="text-sm text-muted-foreground text-center py-4">Cart je prazna</p>
         ) : (
           <>
             <div className="space-y-2 max-h-96 overflow-y-auto">
@@ -90,22 +90,22 @@ export function PosCart() {
             </div>
             <div className="border-t pt-2 space-y-1 text-sm">
               <div className="flex justify-between">
-                <span>Neto</span>
+                <span>Net</span>
                 <span className="tabular-nums">{totalNet.toFixed(2)} €</span>
               </div>
               {vatBreakdown.map((v) => (
                 <div key={v.rate} className="flex justify-between text-muted-foreground">
-                  <span>DDV {v.rate}%</span>
+                  <span>VAT {v.rate}%</span>
                   <span className="tabular-nums">{v.vat.toFixed(2)} €</span>
                 </div>
               ))}
               <div className="flex justify-between font-bold text-base pt-1 border-t">
-                <span>SKUPAJ</span>
+                <span>TOTAL</span>
                 <span className="tabular-nums">{totalGross.toFixed(2)} €</span>
               </div>
             </div>
             <Button className="w-full" onClick={handleCheckout} disabled={loading}>
-              {loading ? "Fiskaliziram..." : `Plačaj ${totalGross.toFixed(2)} €`}
+              {loading ? "Fiscalizing..." : `Pay ${totalGross.toFixed(2)} €`}
             </Button>
           </>
         )}

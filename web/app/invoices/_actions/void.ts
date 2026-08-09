@@ -5,10 +5,10 @@ import { revalidatePath } from "next/cache"
 
 export async function voidInvoice(id: string) {
   const invoice = await db.invoice.findUnique({ where: { id } })
-  if (!invoice) return { ok: false as const, error: "Račun ne obstaja" }
+  if (!invoice) return { ok: false as const, error: "Invoice not found" }
 
   if (invoice.fiscalNumber) {
-    return { ok: false as const, error: "Fiskaliziran račun ne more biti izbrisan" }
+    return { ok: false as const, error: "Fiscalized invoice cannot be deleted" }
   }
 
   await db.invoice.delete({ where: { id } })

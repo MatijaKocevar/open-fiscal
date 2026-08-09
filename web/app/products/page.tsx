@@ -13,7 +13,7 @@ async function ProductList() {
   if (products.length === 0) {
     return (
       <div className="text-center py-12 text-muted-foreground border rounded-lg">
-        Ni izdelkov. Dodajte prvi izdelek.
+        No products. Add first product.
       </div>
     )
   }
@@ -32,7 +32,7 @@ async function ProductList() {
                 <Badge variant="secondary">DDV {Number(product.vatRate)}%</Badge>
               </div>
               <div className="text-xs text-muted-foreground mt-1">
-                Zaloga: {Number(product.stockQty)} {product.unit}
+                Stock: {Number(product.stockQty)} {product.unit}
               </div>
             </CardContent>
           </Card>
@@ -46,9 +46,9 @@ export default function ProductsPage() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Izdelki</h1>
+        <h1 className="text-2xl font-bold">Products</h1>
         <Link href="/products/new" className="text-sm text-primary hover:underline">
-          + Dodaj izdelek
+          + Add product
         </Link>
       </div>
       <Suspense fallback={<Skeleton className="h-48 w-full" />}>

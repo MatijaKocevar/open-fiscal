@@ -13,7 +13,7 @@ export default async function CustomerEditPage({ params }: { params: Promise<{ i
 
   return (
     <div className="space-y-4 max-w-xl">
-      <h1 className="text-2xl font-bold">Uredi stranko</h1>
+      <h1 className="text-2xl font-bold">Edit customer</h1>
       <Card>
         <CardContent className="pt-6">
           <CustomerForm customer={{

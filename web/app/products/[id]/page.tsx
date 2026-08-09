@@ -13,7 +13,7 @@ export default async function ProductEditPage({ params }: { params: Promise<{ id
 
   return (
     <div className="space-y-4 max-w-xl">
-      <h1 className="text-2xl font-bold">Uredi izdelek</h1>
+      <h1 className="text-2xl font-bold">Edit product</h1>
       <Card>
         <CardContent className="pt-6">
           <ProductForm product={{ id: product.id, name: product.name, unitPrice: Number(product.unitPrice), vatRate: Number(product.vatRate), unit: product.unit, barcode: product.barcode ?? "" }} />

@@ -37,18 +37,18 @@ export function ProductForm({ product }: Props) {
     if (!result.ok) {
       showError(result.error)
     } else {
-      showSuccess("Izdelek posodobljen")
+      showSuccess("Product updated")
       router.push("/products")
     }
   }
 
   async function handleDelete() {
-    if (!confirm("Izbriši izdelek?")) return
+    if (!confirm("Delete product?")) return
     setDeleting(true)
     const result = await deleteProduct(product.id)
     setDeleting(false)
     if (result.ok) {
-      showSuccess("Izdelek izbrisan")
+      showSuccess("Product deleted")
       router.push("/products")
     } else {
       showError(result.error)
@@ -58,16 +58,16 @@ export function ProductForm({ product }: Props) {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <label className="text-sm font-medium">Naziv</label>
+        <label className="text-sm font-medium">Title</label>
         <Input value={name} onChange={(e) => setName(e.target.value)} />
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <label className="text-sm font-medium">Cena (€)</label>
+          <label className="text-sm font-medium">Price (€)</label>
           <Input type="number" step="0.01" value={unitPrice} onChange={(e) => setUnitPrice(e.target.value)} />
         </div>
         <div className="space-y-2">
-          <label className="text-sm font-medium">DDV (%)</label>
+          <label className="text-sm font-medium">VAT (%)</label>
           <Select value={vatRate} onValueChange={(v) => setVatRate(v ?? "22")}>
             <SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>
@@ -80,20 +80,20 @@ export function ProductForm({ product }: Props) {
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <label className="text-sm font-medium">Enota</label>
+          <label className="text-sm font-medium">Unit</label>
           <Input value={unit} onChange={(e) => setUnit(e.target.value)} placeholder="kos" />
         </div>
         <div className="space-y-2">
-          <label className="text-sm font-medium">Črtna koda</label>
+          <label className="text-sm font-medium">Barcode</label>
           <Input value={barcode} onChange={(e) => setBarcode(e.target.value)} placeholder="5901234567890" />
         </div>
       </div>
       <div className="flex justify-between pt-2">
         <Button variant="destructive" onClick={handleDelete} disabled={deleting}>
-          {deleting ? "Brisanje..." : "Izbriši"}
+          {deleting ? "Deleting..." : "Delete"}
         </Button>
         <Button onClick={handleSave} disabled={loading}>
-          {loading ? "Shranjevanje..." : "Shrani"}
+          {loading ? "Saving..." : "Save"}
         </Button>
       </div>
     </div>

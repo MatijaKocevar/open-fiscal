@@ -12,7 +12,7 @@ async function InvoiceTable() {
   if (invoices.length === 0) {
     return (
       <div className="text-center py-12 text-muted-foreground border rounded-lg">
-        Ni računov.
+        No invoices.
       </div>
     )
   }
@@ -34,7 +34,7 @@ async function InvoiceTable() {
           </div>
           <div className="flex items-center gap-3">
             <Badge variant={inv.fiscalNumber ? "default" : "outline"}>
-              {inv.fiscalNumber ? "EOR" : "Brez EOR"}
+              {inv.fiscalNumber ? "EOR" : "No EOR"}
             </Badge>
             <span className="font-medium tabular-nums">{Number(inv.totalGross).toFixed(2)} €</span>
           </div>
@@ -47,7 +47,7 @@ async function InvoiceTable() {
 export default function InvoicesPage() {
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold">Računi</h1>
+      <h1 className="text-2xl font-bold">Invoices</h1>
       <Suspense fallback={<Skeleton className="h-96 w-full" />}>
         <InvoiceTable />
       </Suspense>

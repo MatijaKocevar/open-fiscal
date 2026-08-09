@@ -9,7 +9,7 @@ export async function deleteProduct(id: string) {
     revalidatePath("/products")
     return { ok: true as const }
   } catch (error) {
-    const msg = error instanceof Error ? error.message : "Napaka pri brisanju"
+    const msg = error instanceof Error ? error.message : "Delete error"
     return { ok: false as const, error: msg }
   }
 }
