@@ -1,0 +1,43 @@
+# Environment
+.env
+.env.local
+.env.production
+
+# Certificates
+certs/
+!certs/.gitkeep
+
+# Dependencies
+node_modules/
+web/node_modules/
+
+# Build output
+web/.next/
+web/out/
+
+# Prisma
+web/prisma/migrations/
+
+# Docker volumes
+pgdata/
+pgdata-dev/
+backups/
+
+# .NET
+furs-bridge/bin/
+furs-bridge/obj/
+furs-bridge-tests/bin/
+furs-bridge-tests/obj/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backup
+backups/

@@ -1,0 +1,53 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${DB_NAME:-dpr_fiscal}
+      POSTGRES_USER: ${DB_USER:-dpr}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-dpr_secret}
+    ports: ["127.0.0.1:5432:5432"]
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${DB_USER:-dpr}"]
+      interval: 10s
+      retries: 5
+
+  bridge:
+    build:
+      context: ./furs-bridge
+      dockerfile: Dockerfile
+    environment:
+      BRIDGE_MOCK: ${BRIDGE_MOCK:-true}
+      FURS_BASE_URL: ${FURS_BASE_URL:-https://blagajne-test.fu.gov.si:9002}
+      CERT_STORE_PATH: /certs
+      CERT_PASSWORD: ${CERT_PASSWORD:-}
+      TAX_NUMBER: ${TAX_NUMBER:-}
+      PREMISE_ID: ${PREMISE_ID:-}
+      DEVICE_ID: ${DEVICE_ID:-}
+    ports: ["127.0.0.1:5100:8080"]
+    volumes:
+      - ./certs:/certs:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
+      interval: 15s
+      retries: 3
+      start_period: 5s
+
+  app:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgresql://${DB_USER:-dpr}:${DB_PASSWORD:-dpr_secret}@postgres:5432/${DB_NAME:-dpr_fiscal}
+      BRIDGE_URL: http://bridge:8080
+      AUTH_SECRET: ${AUTH_SECRET:-}
+    ports: ["3000:3000"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      bridge:
+        condition: service_healthy
+
+volumes:
+  pgdata:
