@@ -26,8 +26,12 @@ backups/
 # .NET
 furs-bridge/bin/
 furs-bridge/obj/
+furs-bridge/**/bin/
+furs-bridge/**/obj/
 furs-bridge-tests/bin/
 furs-bridge-tests/obj/
+furs-bridge-tests/**/bin/
+furs-bridge-tests/**/obj/
 
 # IDE
 .vscode/
