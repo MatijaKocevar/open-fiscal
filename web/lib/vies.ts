@@ -10,6 +10,21 @@ export interface ViesTraderData {
   date: string
 }
 
+interface ViesApiResponse {
+  vies?: {
+    countryCode: string
+    vatNumber: string
+    valid: boolean
+    traderName: string | null
+    traderCompanyType: string | null
+    traderAddress: string | null
+    id: string | null
+    date: string
+  }
+  code?: number
+  description?: string
+}
+
 export async function validateVatViaViesApi(vatNumber: string): Promise<ViesTraderData | null> {
   const keyId = process.env.VIES_API_KEY_ID
   const key = process.env.VIES_API_KEY
@@ -28,5 +43,17 @@ export async function validateVatViaViesApi(vatNumber: string): Promise<ViesTrad
 
   if (!res.ok) return null
 
-  return res.json()
+  const body = (await res.json()) as ViesApiResponse
+
+  if (!body.vies) return null
+
+  return {
+    countryCode: body.vies.countryCode,
+    vatNumber: body.vies.vatNumber,
+    valid: body.vies.valid,
+    traderName: body.vies.traderName,
+    traderAddress: body.vies.traderAddress,
+    id: body.vies.id,
+    date: body.vies.date,
+  }
 }
