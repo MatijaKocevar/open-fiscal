@@ -1,26 +1,31 @@
-const VIESAC_BASE_URL = "https://viesac.eu/api/v1"
+const VIES_API_BASE_URL = process.env.VIES_API_BASE_URL || "https://viesapi.eu/api"
 
-export interface VatValidationResult {
-  vat: string
-  country_code: string
-  vat_number: string
-  status: "valid" | "invalid" | "audit_required"
-  checked_at: string
-  name?: string
-  address?: string
+export interface ViesTraderData {
+  countryCode: string
+  vatNumber: string
+  valid: boolean
+  traderName: string | null
+  traderAddress: string | null
+  id: string | null
+  date: string
 }
 
-export async function validateVatViaViesac(vatNumber: string): Promise<VatValidationResult | null> {
-  const apiKey = process.env.VIESAC_API_KEY
-  if (!apiKey) return null
+export async function validateVatViaViesApi(vatNumber: string): Promise<ViesTraderData | null> {
+  const keyId = process.env.VIES_API_KEY_ID
+  const key = process.env.VIES_API_KEY
+  if (!keyId || !key) return null
 
-  const url = `${VIESAC_BASE_URL}/validate?vat=${encodeURIComponent(vatNumber)}`
+  const auth = Buffer.from(`${keyId}:${key}`).toString("base64")
+
+  const url = `${VIES_API_BASE_URL}/get/vies/euvat/${encodeURIComponent(vatNumber)}`
   const res = await fetch(url, {
-    headers: { Authorization: `Bearer ${apiKey}` },
+    headers: {
+      Authorization: `Basic ${auth}`,
+      Accept: "application/json",
+    },
     cache: "no-store",
   })
 
-  if (res.status === 429) return null
   if (!res.ok) return null
 
   return res.json()

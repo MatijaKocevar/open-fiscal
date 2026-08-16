@@ -43,7 +43,9 @@ services:
       BRIDGE_URL: http://bridge:8080
       AUTH_SECRET: ${AUTH_SECRET:-}
       AUTH_TRUST_HOST: "true"
-      VIESAC_API_KEY: ${VIESAC_API_KEY:-}
+      VIES_API_BASE_URL: ${VIES_API_BASE_URL:-https://viesapi.eu/api}
+      VIES_API_KEY_ID: ${VIES_API_KEY_ID:-}
+      VIES_API_KEY: ${VIES_API_KEY:-}
     ports: ["3000:3000"]
     depends_on:
       postgres:

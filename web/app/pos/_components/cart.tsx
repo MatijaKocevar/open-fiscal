@@ -38,8 +38,11 @@ export function PosCart({ customers }: Props) {
         return
       }
       if (result.result.vies) {
-        setVatStatus(result.result.vies.status === "valid" ? "valid" : "invalid")
-        setVatInfo({ name: result.result.vies.name, address: result.result.vies.address })
+        setVatStatus(result.result.vies.valid ? "valid" : "invalid")
+        setVatInfo({
+          name: result.result.vies.traderName ?? undefined,
+          address: result.result.vies.traderAddress ?? undefined,
+        })
       } else {
         setVatStatus(result.result.checksumOk ? "valid" : "invalid")
         setVatInfo(null)
