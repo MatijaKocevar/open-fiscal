@@ -19,7 +19,7 @@ await db.settings.deleteMany()
 await db.user.deleteMany()
 await db.company.deleteMany()
 
-await db.company.create({ data: { name: "Demo d.o.o.", taxNumber: "12345678", vatId: "SI12345678", address: "Slovenska cesta 1", city: "Ljubljana", postalCode: "1000", phone: "01 234 56 78", email: "info@demo.si", iban: "SI56 0201 0123 4567 890" } })
+await db.company.create({ data: { name: "Demo d.o.o.", taxNumber: "10044728", vatId: "SI10044728", address: "Slovenska cesta 1", city: "Ljubljana", postalCode: "1000", phone: "01 234 56 78", email: "info@demo.si", iban: "SI56 0201 0123 4567 890" } })
 
 const hash = await bcrypt.hash("demo1234", 12)
 await db.user.create({ data: { email: "admin@demo.si", passwordHash: hash, name: "Admin", role: "OWNER" } })
@@ -39,9 +39,9 @@ const products = await Promise.all([
 ])
 
 await db.customer.createMany({ data: [
-  { name: "Janez Novak", vatId: "11111111", city: "Ljubljana" },
+  { name: "Janez Novak", vatId: "30000009", city: "Ljubljana" },
   { name: "Maja Kranjc", city: "Maribor" },
-  { name: "ABC Company Ltd.", vatId: "22222222", city: "Celje" },
+  { name: "ABC Company Ltd.", vatId: "40000001", city: "Celje" },
 ] })
 
 const now = new Date()
