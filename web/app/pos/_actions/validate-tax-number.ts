@@ -9,9 +9,11 @@ export async function validateTaxNumber(vatId: string) {
   const checksumOk = isValidSlovenianTaxNumber(vatId)
 
   const normalized = vatId.trim().toUpperCase()
-  const withPrefix = normalized.startsWith("SI") ? normalized : `SI${stripVatPrefix(normalized)}`
+  const hasCountryPrefix = /^[A-Z]{2}/.test(normalized)
+  const countryCode = hasCountryPrefix ? normalized.slice(0, 2) : "SI"
+  const vatNumber = hasCountryPrefix ? normalized.slice(2) : stripVatPrefix(normalized)
 
-  const viesResult = await validateVatViaViesApi(withPrefix)
+  const viesResult = await validateVatViaViesApi(countryCode, vatNumber)
 
   return {
     ok: true as const,

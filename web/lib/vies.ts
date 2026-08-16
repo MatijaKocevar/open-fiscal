@@ -1,4 +1,4 @@
-const VIES_API_BASE_URL = process.env.VIES_API_BASE_URL || "https://viesapi.eu/api"
+const VIES_SOAP_URL = "https://ec.europa.eu/taxation_customs/vies/services/checkVatService"
 
 export interface ViesTraderData {
   countryCode: string
@@ -6,54 +6,48 @@ export interface ViesTraderData {
   valid: boolean
   traderName: string | null
   traderAddress: string | null
-  id: string | null
-  date: string
+  requestDate: string
 }
 
-interface ViesApiResponse {
-  vies?: {
-    countryCode: string
-    vatNumber: string
-    valid: boolean
-    traderName: string | null
-    traderCompanyType: string | null
-    traderAddress: string | null
-    id: string | null
-    date: string
-  }
-  code?: number
-  description?: string
-}
+export async function validateVatViaViesApi(countryCode: string, vatNumber: string): Promise<ViesTraderData | null> {
+  const body = `<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <checkVat xmlns="urn:ec.europa.eu:taxud:vies:services:checkVat:types">
+      <countryCode>${countryCode}</countryCode>
+      <vatNumber>${vatNumber}</vatNumber>
+    </checkVat>
+  </soap:Body>
+</soap:Envelope>`
 
-export async function validateVatViaViesApi(vatNumber: string): Promise<ViesTraderData | null> {
-  const keyId = process.env.VIES_API_KEY_ID
-  const key = process.env.VIES_API_KEY
-  if (!keyId || !key) return null
-
-  const auth = Buffer.from(`${keyId}:${key}`).toString("base64")
-
-  const url = `${VIES_API_BASE_URL}/get/vies/euvat/${encodeURIComponent(vatNumber)}`
-  const res = await fetch(url, {
+  const res = await fetch(VIES_SOAP_URL, {
+    method: "POST",
     headers: {
-      Authorization: `Basic ${auth}`,
-      Accept: "application/json",
+      "Content-Type": "text/xml;charset=UTF-8",
+      SOAPAction: "",
     },
+    body,
     cache: "no-store",
   })
 
   if (!res.ok) return null
 
-  const body = (await res.json()) as ViesApiResponse
+  const xml = await res.text()
 
-  if (!body.vies) return null
+  const pick = (tag: string) => {
+    const match = xml.match(new RegExp(`<[^>]*:?${tag}[^>]*>([\\s\\S]*?)<\\/[^>]*:?${tag}>`))
+    return match ? match[1].trim() : null
+  }
+
+  const validStr = pick("valid")
+  if (validStr === null) return null
 
   return {
-    countryCode: body.vies.countryCode,
-    vatNumber: body.vies.vatNumber,
-    valid: body.vies.valid,
-    traderName: body.vies.traderName,
-    traderAddress: body.vies.traderAddress,
-    id: body.vies.id,
-    date: body.vies.date,
+    countryCode: pick("countryCode") ?? "",
+    vatNumber: pick("vatNumber") ?? vatNumber,
+    valid: validStr.toLowerCase() === "true",
+    traderName: pick("name"),
+    traderAddress: pick("address"),
+    requestDate: pick("requestDate") ?? "",
   }
 }
