@@ -5,11 +5,10 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useCart } from "@/stores/cart"
-import { checkout } from "../_actions"
+import { checkout, validateTaxNumber } from "../_actions"
 import { showError, showSuccess } from "@/lib/toast-error"
-import { isValidSlovenianTaxNumber } from "@/lib/tax-number"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { calculateVat, sumVatBreakdown, sumTotals } from "@/lib/vat"
 
 interface Props {
@@ -20,6 +19,36 @@ export function PosCart({ customers }: Props) {
   const { items, customerId, customerVatId, removeItem, updateQuantity, clear, setCustomer, setCustomerVatId } = useCart()
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const [vatStatus, setVatStatus] = useState<"idle" | "checking" | "valid" | "invalid">("idle")
+  const [vatInfo, setVatInfo] = useState<{ name?: string; address?: string } | null>(null)
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    if (!customerVatId) {
+      setVatStatus("idle")
+      setVatInfo(null)
+      return
+    }
+    setVatStatus("checking")
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(async () => {
+      const result = await validateTaxNumber(customerVatId)
+      if (!result.ok || !result.result) {
+        setVatStatus("idle")
+        return
+      }
+      if (result.result.vies) {
+        setVatStatus(result.result.vies.status === "valid" ? "valid" : "invalid")
+        setVatInfo({ name: result.result.vies.name, address: result.result.vies.address })
+      } else {
+        setVatStatus(result.result.checksumOk ? "valid" : "invalid")
+        setVatInfo(null)
+      }
+    }, 500)
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current)
+    }
+  }, [customerVatId])
 
   const lineItems = items.map((item) => {
     const { net, vat, gross } = calculateVat(item.unitPrice, item.quantity, item.vatRate)
@@ -126,10 +155,16 @@ export function PosCart({ customers }: Props) {
                   onChange={(e) => setCustomerVatId(e.target.value)}
                   placeholder="Optional — for B2B invoice"
                 />
-                {customerVatId && (
-                  <p className={isValidSlovenianTaxNumber(customerVatId) ? "text-xs text-green-600" : "text-xs text-red-500"}>
-                    {isValidSlovenianTaxNumber(customerVatId) ? "✓ Valid tax number" : "✗ Invalid tax number"}
+                {customerVatId && vatStatus === "checking" && (
+                  <p className="text-xs text-muted-foreground">Checking…</p>
+                )}
+                {customerVatId && vatStatus === "valid" && (
+                  <p className="text-xs text-green-600">
+                    ✓ Valid{vatInfo?.name ? ` — ${vatInfo.name}` : ""}
                   </p>
+                )}
+                {customerVatId && vatStatus === "invalid" && (
+                  <p className="text-xs text-red-500">✗ Invalid tax number</p>
                 )}
               </div>
             </div>

@@ -43,6 +43,7 @@ services:
       BRIDGE_URL: http://bridge:8080
       AUTH_SECRET: ${AUTH_SECRET:-}
       AUTH_TRUST_HOST: "true"
+      VIESAC_API_KEY: ${VIESAC_API_KEY:-}
     ports: ["3000:3000"]
     depends_on:
       postgres:
