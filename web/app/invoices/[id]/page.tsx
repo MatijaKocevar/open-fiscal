@@ -58,7 +58,9 @@ export default async function InvoiceDetailPage({ params }: { params: Promise<{ 
                   <span>
                     {item.name} × {Number(item.quantity)}
                   </span>
-                  <span className="tabular-nums">{Number(item.totalNet).toFixed(2)} €</span>
+                  <span className="tabular-nums">
+                    {(Number(item.totalNet) + Number(item.totalVat)).toFixed(2)} €
+                  </span>
                 </div>
               ))}
             </div>

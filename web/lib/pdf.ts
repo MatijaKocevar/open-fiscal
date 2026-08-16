@@ -48,7 +48,7 @@ export async function generateReceiptPdf(data: ReceiptData): Promise<Buffer> {
   const rows = data.items.map(item => [
     item.name,
     `${item.qty} x ${item.price.toFixed(2)}`,
-    item.net.toFixed(2)
+    (item.net + item.vat).toFixed(2)
   ])
 
   ;(doc as any).autoTable({

@@ -1,11 +1,12 @@
 export function calculateVat(pricePerUnit: number, quantity: number, vatRatePercent: number) {
   const taxRate = vatRatePercent / 100
-  const totalNet = Math.round(pricePerUnit * quantity * 100) / 100
-  const totalVat = Math.round(totalNet * taxRate * 100) / 100
+  const totalGross = Math.round(pricePerUnit * quantity * 100) / 100
+  const totalNet = Math.round((totalGross / (1 + taxRate)) * 100) / 100
+  const totalVat = Math.round((totalGross - totalNet) * 100) / 100
   return {
     net: totalNet,
     vat: totalVat,
-    gross: Math.round((totalNet + totalVat) * 100) / 100,
+    gross: totalGross,
     rate: vatRatePercent
   }
 }

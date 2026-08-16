@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useCart } from "@/stores/cart"
 import { checkout } from "../_actions"
 import { showError, showSuccess } from "@/lib/toast-error"
+import { isValidSlovenianTaxNumber } from "@/lib/tax-number"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { calculateVat, sumVatBreakdown, sumTotals } from "@/lib/vat"
@@ -125,6 +126,11 @@ export function PosCart({ customers }: Props) {
                   onChange={(e) => setCustomerVatId(e.target.value)}
                   placeholder="Optional — for B2B invoice"
                 />
+                {customerVatId && (
+                  <p className={isValidSlovenianTaxNumber(customerVatId) ? "text-xs text-green-600" : "text-xs text-red-500"}>
+                    {isValidSlovenianTaxNumber(customerVatId) ? "✓ Valid tax number" : "✗ Invalid tax number"}
+                  </p>
+                )}
               </div>
             </div>
 

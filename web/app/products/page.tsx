@@ -29,7 +29,7 @@ async function ProductList() {
                 <span className="text-lg font-bold tabular-nums">
                   {Number(product.unitPrice).toFixed(2)} €
                 </span>
-                <Badge variant="secondary">DDV {Number(product.vatRate)}%</Badge>
+                <Badge variant="secondary">VAT {Number(product.vatRate)}%</Badge>
               </div>
               <div className="text-xs text-muted-foreground mt-1">
                 Stock: {Number(product.stockQty)} {product.unit}

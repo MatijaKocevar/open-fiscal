@@ -63,7 +63,7 @@ export function ProductForm({ product }: Props) {
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <label className="text-sm font-medium">Price (€)</label>
+          <label className="text-sm font-medium">Price incl. VAT (€)</label>
           <Input type="number" step="0.01" value={unitPrice} onChange={(e) => setUnitPrice(e.target.value)} />
         </div>
         <div className="space-y-2">
