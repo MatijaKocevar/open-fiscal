@@ -3,30 +3,25 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { updateProduct, deleteProduct } from "@/app/products/_actions"
+import { createProduct } from "@/app/products/_actions"
 import { showError, showSuccess } from "@/lib/toast-error"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 const VAT_RATES = ["0", "5", "9.5", "22", "25"]
 
-interface Props {
-  product: { id: string; name: string; unitPrice: number; vatRate: number; unit: string; barcode: string }
-}
-
-export function ProductForm({ product }: Props) {
+export function NewProductForm() {
   const router = useRouter()
-  const [name, setName] = useState(product.name)
-  const [unitPrice, setUnitPrice] = useState(product.unitPrice.toString())
-  const [vatRate, setVatRate] = useState(product.vatRate.toString())
-  const [unit, setUnit] = useState(product.unit)
-  const [barcode, setBarcode] = useState(product.barcode)
+  const [name, setName] = useState("")
+  const [unitPrice, setUnitPrice] = useState("")
+  const [vatRate, setVatRate] = useState("22")
+  const [unit, setUnit] = useState("pcs")
+  const [barcode, setBarcode] = useState("")
   const [loading, setLoading] = useState(false)
-  const [deleting, setDeleting] = useState(false)
 
   async function handleSave() {
     setLoading(true)
-    const result = await updateProduct(product.id, {
+    const result = await createProduct({
       name,
       unitPrice: parseFloat(unitPrice) || 0,
       vatRate: parseFloat(vatRate) || 22,
@@ -37,21 +32,8 @@ export function ProductForm({ product }: Props) {
     if (!result.ok) {
       showError(result.error)
     } else {
-      showSuccess("Product updated")
+      showSuccess("Product created")
       router.push("/products")
-    }
-  }
-
-  async function handleDelete() {
-    if (!confirm("Delete product?")) return
-    setDeleting(true)
-    const result = await deleteProduct(product.id)
-    setDeleting(false)
-    if (result.ok) {
-      showSuccess("Product deleted")
-      router.push("/products")
-    } else {
-      showError(result.error)
     }
   }
 
@@ -59,12 +41,12 @@ export function ProductForm({ product }: Props) {
     <div className="space-y-4">
       <div className="space-y-2">
         <label className="text-sm font-medium">Title</label>
-        <Input value={name} onChange={(e) => setName(e.target.value)} />
+        <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Espresso" />
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <label className="text-sm font-medium">Price (€)</label>
-          <Input type="number" step="0.01" value={unitPrice} onChange={(e) => setUnitPrice(e.target.value)} />
+          <Input type="number" step="0.01" value={unitPrice} onChange={(e) => setUnitPrice(e.target.value)} placeholder="2.50" />
         </div>
         <div className="space-y-2">
           <label className="text-sm font-medium">VAT (%)</label>
@@ -88,10 +70,7 @@ export function ProductForm({ product }: Props) {
           <Input value={barcode} onChange={(e) => setBarcode(e.target.value)} placeholder="5901234567890" />
         </div>
       </div>
-      <div className="flex justify-between pt-2">
-        <Button variant="destructive" onClick={handleDelete} disabled={deleting}>
-          {deleting ? "Deleting..." : "Delete"}
-        </Button>
+      <div className="flex justify-end pt-2">
         <Button onClick={handleSave} disabled={loading}>
           {loading ? "Saving..." : "Save"}
         </Button>
