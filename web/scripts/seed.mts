@@ -7,6 +7,18 @@ const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL || "postgr
 const adapter = new PrismaPg(pool)
 const db = new PrismaClient({ adapter })
 
+// Idempotent: wipe and recreate demo data
+await db.invoiceLineItem.deleteMany()
+await db.invoice.deleteMany()
+await db.customer.deleteMany()
+await db.product.deleteMany()
+await db.appointment.deleteMany()
+await db.device.deleteMany()
+await db.premise.deleteMany()
+await db.settings.deleteMany()
+await db.user.deleteMany()
+await db.company.deleteMany()
+
 await db.company.create({ data: { name: "Demo d.o.o.", taxNumber: "12345678", vatId: "SI12345678", address: "Slovenska cesta 1", city: "Ljubljana", postalCode: "1000", phone: "01 234 56 78", email: "info@demo.si", iban: "SI56 0201 0123 4567 890" } })
 
 const hash = await bcrypt.hash("demo1234", 12)
