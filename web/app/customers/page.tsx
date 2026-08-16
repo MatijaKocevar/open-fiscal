@@ -42,7 +42,12 @@ async function CustomerList() {
 export default function CustomersPage() {
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold">Customers</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">Customers</h1>
+        <Link href="/customers/new" className="text-sm text-primary hover:underline">
+          + Add customer
+        </Link>
+      </div>
       <Suspense fallback={<Skeleton className="h-48 w-full" />}>
         <CustomerList />
       </Suspense>
