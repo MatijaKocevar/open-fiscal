@@ -10,14 +10,20 @@ interface CartItem {
 
 interface CartState {
   items: CartItem[]
+  customerId: string | null
+  customerVatId: string
   addItem: (product: { id: string; name: string; unitPrice: number; vatRate: number }) => void
   removeItem: (productId: string) => void
   updateQuantity: (productId: string, quantity: number) => void
+  setCustomer: (customer: { id: string | null; vatId: string }) => void
+  setCustomerVatId: (vatId: string) => void
   clear: () => void
 }
 
 export const useCart = create<CartState>((set) => ({
   items: [],
+  customerId: null,
+  customerVatId: "",
   addItem: (product) =>
     set((state) => {
       const existing = state.items.find((i) => i.productId === product.id)
@@ -53,5 +59,8 @@ export const useCart = create<CartState>((set) => ({
             i.productId === productId ? { ...i, quantity } : i
           ),
     })),
-  clear: () => set({ items: [] }),
+  setCustomer: (customer) =>
+    set({ customerId: customer.id, customerVatId: customer.vatId }),
+  setCustomerVatId: (vatId) => set({ customerVatId: vatId }),
+  clear: () => set({ items: [], customerId: null, customerVatId: "" }),
 }))

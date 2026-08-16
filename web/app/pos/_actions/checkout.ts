@@ -12,7 +12,7 @@ export async function checkout(formData: unknown) {
     return { ok: false as const, error: parsed.error.issues[0]?.message || "Invalid data" }
   }
 
-  const { paymentMethod, customerId, items } = parsed.data
+  const { paymentMethod, customerId, customerVatId, items } = parsed.data
 
   const totals = sumTotals(items.map(i => ({ net: i.totalNet, vat: i.totalVat, gross: i.totalNet + i.totalVat })))
 
@@ -45,6 +45,7 @@ export async function checkout(formData: unknown) {
         totalNet: i.totalNet,
         totalVat: i.totalVat,
       })),
+      customerVatId: customerVatId || undefined,
     })
 
     const invoice = await db.invoice.create({
@@ -64,6 +65,7 @@ export async function checkout(formData: unknown) {
         premiseId: premise.premiseId,
         createdBy: "system",
         customerId: customerId || null,
+        customerVatId: customerVatId || null,
         items: {
           create: items.map(i => ({
             name: i.name,

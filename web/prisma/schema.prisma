@@ -98,6 +98,7 @@ model Invoice {
   premiseId     String
   emailedTo     String?
   customerId    String?
+  customerVatId String?
   customer      Customer? @relation(fields: [customerId], references: [id])
   items         InvoiceLineItem[]
   createdBy     String

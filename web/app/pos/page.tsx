@@ -3,10 +3,13 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { ProductGrid } from "./_components/product-grid"
 import { ProductGridSkeleton } from "./_components/product-grid-skeleton"
 import { PosCart } from "./_components/cart"
+import { getAllCustomers } from "@/lib/queries/customers"
 
 export const dynamic = "force-dynamic"
 
-export default function PosPage() {
+export default async function PosPage() {
+  const customers = await getAllCustomers()
+
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-bold">POS</h1>
@@ -17,7 +20,7 @@ export default function PosPage() {
           </Suspense>
         </div>
         <div>
-          <PosCart />
+          <PosCart customers={customers} />
         </div>
       </div>
     </div>

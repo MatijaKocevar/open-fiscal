@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useCart } from "@/stores/cart"
 import { checkout } from "../_actions"
 import { showError, showSuccess } from "@/lib/toast-error"
@@ -10,8 +11,12 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { calculateVat, sumVatBreakdown, sumTotals } from "@/lib/vat"
 
-export function PosCart() {
-  const { items, removeItem, updateQuantity, clear } = useCart()
+interface Props {
+  customers: Array<{ id: string; name: string; vatId: string | null }>
+}
+
+export function PosCart({ customers }: Props) {
+  const { items, customerId, customerVatId, removeItem, updateQuantity, clear, setCustomer, setCustomerVatId } = useCart()
   const router = useRouter()
   const [loading, setLoading] = useState(false)
 
@@ -23,11 +28,22 @@ export function PosCart() {
   const { totalNet, totalVat, totalGross } = sumTotals(lineItems)
   const vatBreakdown = sumVatBreakdown(lineItems.map(i => ({ ...i, rate: i.vatRate })))
 
+  function handleCustomerChange(id: string | null) {
+    if (!id || id === "none") {
+      setCustomer({ id: null, vatId: "" })
+      return
+    }
+    const c = customers.find((x) => x.id === id)
+    setCustomer({ id: c?.id ?? null, vatId: c?.vatId ?? "" })
+  }
+
   async function handleCheckout() {
     if (items.length === 0) return
     setLoading(true)
     const result = await checkout({
       paymentMethod: "CASH",
+      customerId: customerId ?? undefined,
+      customerVatId: customerVatId || undefined,
       items: items.map((item) => {
         const { net, vat } = calculateVat(item.unitPrice, item.quantity, item.vatRate)
         return {
@@ -58,7 +74,7 @@ export function PosCart() {
       </CardHeader>
       <CardContent className="space-y-3">
         {items.length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-4">Cart je prazna</p>
+          <p className="text-sm text-muted-foreground text-center py-4">Cart is empty</p>
         ) : (
           <>
             <div className="space-y-2 max-h-96 overflow-y-auto">
@@ -88,6 +104,30 @@ export function PosCart() {
                 </div>
               ))}
             </div>
+
+            <div className="space-y-2 border-t pt-2">
+              <div className="space-y-1">
+                <label className="text-xs font-medium">Customer</label>
+                <Select value={customerId ?? "none"} onValueChange={handleCustomerChange}>
+                  <SelectTrigger><SelectValue placeholder="Walk-in" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">Walk-in</SelectItem>
+                    {customers.map((c) => (
+                      <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-medium">Tax number (if requested)</label>
+                <Input
+                  value={customerVatId}
+                  onChange={(e) => setCustomerVatId(e.target.value)}
+                  placeholder="Optional — for B2B invoice"
+                />
+              </div>
+            </div>
+
             <div className="border-t pt-2 space-y-1 text-sm">
               <div className="flex justify-between">
                 <span>Net</span>
