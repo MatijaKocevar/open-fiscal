@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# web
 
-## Getting Started
+Next.js 16 App Router frontend for the DPR Fiscal Invoice application: point-of-sale,
+invoices, products, customers, schedule, reports, and admin.
 
-First, run the development server:
+## Prerequisites
+
+- Node.js 20+
+- PostgreSQL 16 (see root `docker-compose.dev.yml`)
+
+## Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npx prisma generate
+npx prisma migrate dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Create `.env` (see root `.env.example`). Minimum required:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+DATABASE_URL=postgresql://dpr:dpr_secret@localhost:5432/dpr_fiscal
+AUTH_SECRET=<random string>
+BRIDGE_URL=http://localhost:5100
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Run
 
-## Learn More
+```bash
+npm run dev     # development server at http://localhost:3000
+npm run build   # production build
+npm run start   # serve the production build
+npm run lint    # eslint
+```
 
-To learn more about Next.js, take a look at the following resources:
+Open <http://localhost:3000/setup> for the first-time wizard (company, SMTP,
+certificates, premise).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Path | Description |
+|------|-------------|
+| `app/` | Routes; colocated `_actions/` (server actions) and `_components/` |
+| `schemas/` | Global Zod schemas (types inferred via `z.infer`) |
+| `lib/` | Shared utilities; `db.ts` is the only place `@prisma/client` is imported |
+| `lib/queries/` | Shared data reads, one file per query + barrel `index.ts` |
+| `stores/` | Zustand client state (`cart`, `ui`) |
+| `components/ui/` | shadcn/ui primitives |
+| `prisma/` | Prisma schema + migrations (client generated to `app/generated/prisma`) |
 
-## Deploy on Vercel
+## Conventions
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `params` and `searchParams` are Promises — always `await` them.
+- `"use server"` only in `app/*/_actions/*.ts`; `"use client"` only where needed.
+- `@prisma/client` only in `lib/db.ts` and `lib/queries/*`.
+- One action per file, one query per file, barrel `index.ts` re-exports.
+- Prisma client is generated to `app/generated/prisma` (see `prisma.config.ts`).
