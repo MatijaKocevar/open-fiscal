@@ -96,15 +96,31 @@ export default function SetupPage() {
           )}
 
           {step === 5 && (
-            <div className="text-center space-y-4">
-              <h2 className="text-xl font-bold">All ready!</h2>
-              <p className="text-muted-foreground">
-                Company <strong>{data.name}</strong> is set up.
-                Premise: {data.premiseName}, Device: {data.deviceName}.
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Save settings and continue to login.
-              </p>
+            <div className="space-y-4">
+              <div className="text-center space-y-4">
+                <h2 className="text-xl font-bold">All ready!</h2>
+                <p className="text-muted-foreground">
+                  Company <strong>{data.name}</strong> is set up.
+                  Premise: {data.premiseName}, Device: {data.deviceName}.
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Create your admin account to log in.
+                </p>
+              </div>
+              <div className="space-y-3">
+                <Input
+                  type="email"
+                  placeholder="Admin email *"
+                  value={data.adminEmail || ""}
+                  onChange={(e) => update("adminEmail", e.target.value)}
+                />
+                <Input
+                  type="password"
+                  placeholder="Admin password * (min 6 chars)"
+                  value={data.adminPassword || ""}
+                  onChange={(e) => update("adminPassword", e.target.value)}
+                />
+              </div>
             </div>
           )}
 
