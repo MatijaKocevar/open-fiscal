@@ -8,7 +8,11 @@ import { getAllCustomers } from "@/lib/queries/customers"
 export const dynamic = "force-dynamic"
 
 export default async function PosPage() {
-  const customers = await getAllCustomers()
+  const customers = (await getAllCustomers()).map((c) => ({
+    id: c.id,
+    name: c.name,
+    vatId: c.vatId,
+  }))
 
   return (
     <div className="space-y-4">
