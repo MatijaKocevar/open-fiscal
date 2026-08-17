@@ -36,6 +36,17 @@ npm run lint    # eslint
 Open <http://localhost:3000/setup> for the first-time wizard (company, SMTP,
 certificates, premise).
 
+## Git workflow
+
+Never commit directly to `main`. Create a feature branch and open a pull request:
+
+```bash
+git fetch origin
+git checkout -b feat/<slug> origin/main   # or fix/, chore/, refactor/, docs/
+git push -u origin feat/<slug>
+gh pr create
+```
+
 ## Structure
 
 | Path | Description |
