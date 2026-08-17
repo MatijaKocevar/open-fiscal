@@ -25,6 +25,14 @@ company_app/
 - Schemas are global → `schemas/`
 - Components colocated → `app/<route>/_components/`
 
+## Git workflow
+- Never commit directly to `main` — always work on a feature branch.
+- Branch from `main`: `git fetch origin && git checkout -b <type>/<slug> origin/main`
+- Branch naming: `feat/<slug>`, `fix/<slug>`, `chore/<slug>`, `refactor/<slug>`, `docs/<slug>`
+- Commit with conventional commits (`feat:`, `fix:`, `chore:`, `refactor:`, `docs:`, …)
+- Push the branch and open a PR (`gh pr create`); do not merge to `main` locally.
+- Only commit when the user asks.
+
 ## Commands
 ```bash
 # Dev

@@ -48,6 +48,17 @@ otherwise startup fails.
 | `POST` | `/api/daily-report` | Submit a daily report |
 | `GET` | `/api/device-info` | Current device/premise/tax config |
 
+## Git workflow
+
+Never commit directly to `main`. Create a feature branch and open a pull request:
+
+```bash
+git fetch origin
+git checkout -b feat/<slug> origin/main   # or fix/, chore/, refactor/, docs/
+git push -u origin feat/<slug>
+gh pr create
+```
+
 ## Tests
 
 xUnit tests live in `../furs-bridge-tests/`:

@@ -39,6 +39,23 @@ make dev   # starts postgres, the bridge (mock mode), and the Next.js dev server
 Open <http://localhost:3000/setup> to run the first-time wizard, or
 <http://localhost:3000> to log in.
 
+## Git workflow
+
+Never commit directly to `main`. Work on a feature branch and open a pull request:
+
+```bash
+git fetch origin
+git checkout -b feat/<slug> origin/main   # or fix/, chore/, refactor/, docs/
+
+# ... make changes ...
+git add <files>
+git commit -m "feat: describe the change" # conventional commits
+git push -u origin feat/<slug>
+gh pr create                              # open a pull request
+```
+
+PRs are reviewed and merged via GitHub — do not merge into `main` locally.
+
 ## Docker
 
 ```bash
