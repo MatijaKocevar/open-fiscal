@@ -1,25 +1,18 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { db } from "@/lib/db"
+import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { getAppointmentsByDate } from "@/lib/queries/appointments"
 
 export const dynamic = "force-dynamic"
 
 export default async function SchedulePage() {
   const now = new Date()
-  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-  const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59)
-
-  const appointments = await db.appointment.findMany({
-    where: {
-      date: { gte: todayStart, lte: todayEnd },
-      isCancelled: false,
-    },
-    orderBy: { date: "asc" },
-  })
+  const appointments = await getAppointmentsByDate(now)
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold">Schedule — {now.toLocaleDateString("sl-SI", { weekday: "long", day: "numeric", month: "long" })}</h1>
+      <h1 className="text-2xl font-bold">
+        Schedule — {now.toLocaleDateString("sl-SI", { weekday: "long", day: "numeric", month: "long" })}
+      </h1>
 
       {appointments.length === 0 ? (
         <Card>
