@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import { auth } from "@/lib/auth"
-import { db } from "@/lib/db"
+import { getUserById } from "@/lib/queries/users"
 import { Badge } from "@/components/ui/badge"
 import {
   Card,
@@ -18,7 +18,7 @@ export default async function AccountPage() {
   const session = await auth()
   if (!session?.user) redirect("/login")
 
-  const user = await db.user.findUnique({ where: { id: session.user.id } })
+  const user = await getUserById(session.user.id)
   if (!user) redirect("/login")
 
   return (

@@ -25,7 +25,7 @@ import {
 import { NavMain, type NavMainItem } from "./nav-main"
 import { NavUser } from "./nav-user"
 
-const navMain: NavMainItem[] = [
+const baseNav: NavMainItem[] = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
   {
     title: "Sales",
@@ -55,12 +55,27 @@ const navMain: NavMainItem[] = [
       { title: "Reports", url: "/reports" },
     ],
   },
-  { title: "Settings", url: "/admin", icon: Settings },
 ]
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname()
   const { data: session } = useSession()
+  const isOwner = session?.user?.role === "OWNER"
+
+  const navMain: NavMainItem[] = [
+    ...baseNav,
+    {
+      title: "Settings",
+      url: "/admin",
+      icon: Settings,
+      items: isOwner
+        ? [
+            { title: "General", url: "/admin" },
+            { title: "Users", url: "/admin/users" },
+          ]
+        : undefined,
+    },
+  ]
 
   return (
     <Sidebar variant="inset" collapsible="icon" {...props}>
