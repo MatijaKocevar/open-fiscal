@@ -1,15 +1,17 @@
 import { getAvailableProducts } from "@/lib/queries/products"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { getTranslations } from "next-intl/server"
 import Link from "next/link"
 
 export async function ProductList() {
+  const t = await getTranslations("products")
   const products = await getAvailableProducts()
 
   if (products.length === 0) {
     return (
       <div className="text-center py-12 text-muted-foreground border rounded-lg">
-        No products. Add first product.
+        {t("noProducts")}
       </div>
     )
   }
@@ -25,10 +27,10 @@ export async function ProductList() {
                 <span className="text-lg font-bold tabular-nums">
                   {Number(product.unitPrice).toFixed(2)} €
                 </span>
-                <Badge variant="secondary">VAT {Number(product.vatRate)}%</Badge>
+                <Badge variant="secondary">{t("vat", { rate: Number(product.vatRate) })}</Badge>
               </div>
               <div className="text-xs text-muted-foreground mt-1">
-                Stock: {Number(product.stockQty)} {product.unit}
+                {t("stock")} {Number(product.stockQty)} {product.unit}
               </div>
             </CardContent>
           </Card>

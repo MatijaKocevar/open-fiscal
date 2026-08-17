@@ -1,8 +1,11 @@
 "use server"
 
-export async function restoreBackup(formData: FormData) {
-  const file = formData.get("backup") as File
-  if (!file) return { ok: false as const, error: "File was not uploaded" }
+import { getActionTranslations } from "@/lib/i18n"
 
-  return { ok: false as const, error: "Restore not implemented. Use restore.sh on the server." }
+export async function restoreBackup(formData: FormData) {
+  const t = await getActionTranslations("errors")
+  const file = formData.get("backup") as File
+  if (!file) return { ok: false as const, error: t("fileNotUploaded") }
+
+  return { ok: false as const, error: t("restoreNotImplemented") }
 }

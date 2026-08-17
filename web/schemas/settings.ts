@@ -1,11 +1,11 @@
 import { z } from "zod"
 
 export const SmtpConfigSchema = z.object({
-  smtp_host: z.string().min(1, "SMTP gostitelj je obvezen"),
-  smtp_port: z.string().regex(/^\d+$/, "Vrata morajo biti številka").default("587"),
-  smtp_user: z.string().min(1, "Uporabnik je obvezen"),
+  smtp_host: z.string().min(1),
+  smtp_port: z.string().regex(/^\d+$/).default("587"),
+  smtp_user: z.string().min(1),
   smtp_pass: z.string(),
-  smtp_from: z.string().min(1, "Pošiljatelj je obvezen"),
+  smtp_from: z.string().min(1),
 })
 
 export const CompanyInfoSchema = z.object({

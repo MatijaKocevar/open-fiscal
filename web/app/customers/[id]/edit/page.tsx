@@ -1,6 +1,7 @@
 import { getCustomerById } from "@/lib/queries/customers"
 import { Card, CardContent } from "@/components/ui/card"
 import { notFound } from "next/navigation"
+import { getTranslations } from "next-intl/server"
 import { CustomerForm } from "../../_components/customer-form"
 
 export const dynamic = "force-dynamic"
@@ -11,9 +12,11 @@ export default async function CustomerEditPage({ params }: { params: Promise<{ i
 
   if (!customer) notFound()
 
+  const t = await getTranslations("customers")
+
   return (
     <div className="space-y-4 max-w-xl">
-      <h1 className="text-2xl font-bold">Edit customer</h1>
+      <h1 className="text-2xl font-bold">{t("editCustomer")}</h1>
       <Card>
         <CardContent className="pt-6">
           <CustomerForm customer={{

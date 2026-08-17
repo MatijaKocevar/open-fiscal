@@ -3,17 +3,22 @@
 import { db } from "@/lib/db"
 import { generateReceiptPdf } from "@/lib/pdf"
 import { sendReceipt } from "@/lib/smtp"
+import { getActionTranslations, getActionLocale } from "@/lib/i18n"
 
 export async function resendReceipt(invoiceId: string, email: string) {
+  const t = await getActionTranslations("errors")
+  const tr = await getActionTranslations("receipt")
+  const locale = await getActionLocale()
+
   const invoice = await db.invoice.findUnique({
     where: { id: invoiceId },
     include: { items: true, customer: true },
   })
 
-  if (!invoice) return { ok: false as const, error: "Invoice not found" }
+  if (!invoice) return { ok: false as const, error: t("invoiceNotFound") }
 
   const company = await db.company.findFirst()
-  if (!company) return { ok: false as const, error: "Company not set up" }
+  if (!company) return { ok: false as const, error: t("companyNotSetUp") }
 
   try {
     const pdf = await generateReceiptPdf({
@@ -41,9 +46,14 @@ export async function resendReceipt(invoiceId: string, email: string) {
         vat: Number(i.totalVat),
       })),
       verifyUrl: invoice.verifyUrl || undefined,
-    })
+    }, locale)
 
-    await sendReceipt(email, `Invoice #${invoice.invoiceNumber}`, pdf)
+    await sendReceipt(
+      email,
+      tr("emailSubject", { number: invoice.invoiceNumber }),
+      tr("emailBody"),
+      pdf
+    )
 
     await db.invoice.update({
       where: { id: invoiceId },
@@ -52,7 +62,7 @@ export async function resendReceipt(invoiceId: string, email: string) {
 
     return { ok: true as const }
   } catch (error) {
-    const msg = error instanceof Error ? error.message : "Send error"
+    const msg = error instanceof Error ? error.message : t("sendError")
     return { ok: false as const, error: msg }
   }
 }

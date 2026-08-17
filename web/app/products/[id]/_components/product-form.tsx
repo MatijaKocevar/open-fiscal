@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useTranslations } from "next-intl"
 import { updateProduct, deleteProduct } from "@/app/products/_actions"
 import { showError, showSuccess } from "@/lib/toast-error"
 import { useRouter } from "next/navigation"
@@ -15,6 +16,8 @@ interface Props {
 }
 
 export function ProductForm({ product }: Props) {
+  const t = useTranslations("products")
+  const tc = useTranslations("common")
   const router = useRouter()
   const [name, setName] = useState(product.name)
   const [unitPrice, setUnitPrice] = useState(product.unitPrice.toString())
@@ -37,18 +40,18 @@ export function ProductForm({ product }: Props) {
     if (!result.ok) {
       showError(result.error)
     } else {
-      showSuccess("Product updated")
+      showSuccess(t("productUpdated"))
       router.push("/products")
     }
   }
 
   async function handleDelete() {
-    if (!confirm("Delete product?")) return
+    if (!confirm(t("deleteConfirm"))) return
     setDeleting(true)
     const result = await deleteProduct(product.id)
     setDeleting(false)
     if (result.ok) {
-      showSuccess("Product deleted")
+      showSuccess(t("productDeleted"))
       router.push("/products")
     } else {
       showError(result.error)
@@ -58,16 +61,16 @@ export function ProductForm({ product }: Props) {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <label className="text-sm font-medium">Title</label>
+        <label className="text-sm font-medium">{t("titleLabel")}</label>
         <Input value={name} onChange={(e) => setName(e.target.value)} />
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <label className="text-sm font-medium">Price incl. VAT (€)</label>
+          <label className="text-sm font-medium">{t("priceInclVat")}</label>
           <Input type="number" step="0.01" value={unitPrice} onChange={(e) => setUnitPrice(e.target.value)} />
         </div>
         <div className="space-y-2">
-          <label className="text-sm font-medium">VAT (%)</label>
+          <label className="text-sm font-medium">{t("vatPct")}</label>
           <Select value={vatRate} onValueChange={(v) => setVatRate(v ?? "22")}>
             <SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>
@@ -80,20 +83,20 @@ export function ProductForm({ product }: Props) {
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <label className="text-sm font-medium">Unit</label>
+          <label className="text-sm font-medium">{t("unit")}</label>
           <Input value={unit} onChange={(e) => setUnit(e.target.value)} placeholder="pcs" />
         </div>
         <div className="space-y-2">
-          <label className="text-sm font-medium">Barcode</label>
+          <label className="text-sm font-medium">{t("barcode")}</label>
           <Input value={barcode} onChange={(e) => setBarcode(e.target.value)} placeholder="5901234567890" />
         </div>
       </div>
       <div className="flex justify-between pt-2">
         <Button variant="destructive" onClick={handleDelete} disabled={deleting}>
-          {deleting ? "Deleting..." : "Delete"}
+          {deleting ? tc("deleting") : tc("delete")}
         </Button>
         <Button onClick={handleSave} disabled={loading}>
-          {loading ? "Saving..." : "Save"}
+          {loading ? tc("saving") : tc("save")}
         </Button>
       </div>
     </div>

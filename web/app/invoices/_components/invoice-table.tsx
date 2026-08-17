@@ -1,14 +1,17 @@
+import { getTranslations, getFormatter } from "next-intl/server"
 import { getRecentInvoices } from "@/lib/queries/invoices"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 
 export async function InvoiceTable() {
+  const t = await getTranslations("invoices")
+  const format = await getFormatter()
   const invoices = await getRecentInvoices(50)
 
   if (invoices.length === 0) {
     return (
       <div className="text-center py-12 text-muted-foreground border rounded-lg">
-        No invoices.
+        {t("noInvoices")}
       </div>
     )
   }
@@ -24,13 +27,19 @@ export async function InvoiceTable() {
           <div>
             <span className="font-medium">#{inv.invoiceNumber}</span>
             <span className="ml-3 text-sm text-muted-foreground">
-              {inv.issueDateTime.toLocaleDateString("sl-SI", { day: "numeric", month: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" })}
+              {format.dateTime(inv.issueDateTime, {
+                day: "numeric",
+                month: "numeric",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
             </span>
             {inv.customer && <span className="ml-2 text-sm">{inv.customer.name}</span>}
           </div>
           <div className="flex items-center gap-3">
             <Badge variant={inv.fiscalNumber ? "default" : "outline"}>
-              {inv.fiscalNumber ? "EOR" : "No EOR"}
+              {inv.fiscalNumber ? t("eor") : t("noEor")}
             </Badge>
             <span className="font-medium tabular-nums">{Number(inv.totalGross).toFixed(2)} €</span>
           </div>

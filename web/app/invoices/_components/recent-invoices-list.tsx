@@ -1,16 +1,18 @@
 import Link from "next/link"
+import { getTranslations } from "next-intl/server"
 import { getRecentInvoices } from "@/lib/queries/invoices"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 
 export async function RecentInvoicesList() {
+  const t = await getTranslations("invoices")
   const invoices = await getRecentInvoices(10)
 
   if (invoices.length === 0) {
     return (
       <Card>
         <CardContent className="py-8 text-center text-muted-foreground">
-          No invoices. Create your first invoice at POS.
+          {t("noInvoicesRecent")}
         </CardContent>
       </Card>
     )
@@ -34,7 +36,7 @@ export async function RecentInvoicesList() {
           </div>
           <div className="flex items-center gap-3">
             <Badge variant={inv.fiscalNumber ? "default" : "outline"}>
-              {inv.fiscalNumber ? "Fiscalized" : "No EOR"}
+              {inv.fiscalNumber ? t("fiscalized") : t("noEor")}
             </Badge>
             <span className="font-medium tabular-nums">
               {Number(inv.totalGross).toFixed(2)} €

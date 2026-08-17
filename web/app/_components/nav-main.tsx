@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import { ChevronRight, type LucideIcon } from "lucide-react"
 
 import {
@@ -44,6 +45,7 @@ function subIsActive(
 }
 
 function NavItem({ item, pathname }: { item: NavMainItem; pathname: string }) {
+  const t = useTranslations("nav")
   const hasItems = Boolean(item.items?.length)
   const items = item.items ?? []
   const sectionActive = items.some((sub) => subIsActive(pathname, sub, items))
@@ -82,7 +84,7 @@ function NavItem({ item, pathname }: { item: NavMainItem; pathname: string }) {
         render={<SidebarMenuAction className="data-panel-open:rotate-90" />}
       >
         <ChevronRight />
-        <span className="sr-only">Toggle {item.title}</span>
+        <span className="sr-only">{t("toggle", { title: item.title })}</span>
       </CollapsibleTrigger>
       <CollapsibleContent>
         <SidebarMenuSub>
@@ -109,9 +111,11 @@ export function NavMain({
   items: NavMainItem[]
   pathname: string
 }) {
+  const t = useTranslations("nav")
+
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Main</SidebarGroupLabel>
+      <SidebarGroupLabel>{t("main")}</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <NavItem key={item.title} item={item} pathname={pathname} />

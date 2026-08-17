@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { signOut } from "next-auth/react"
+import { useTranslations } from "next-intl"
 import { ChevronsUpDown, CircleUser, LogOut, Settings } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -39,8 +40,9 @@ function initials(user: NavUserProps["user"]) {
 }
 
 export function NavUser({ user }: NavUserProps) {
+  const t = useTranslations("nav")
   const { isMobile } = useSidebar()
-  const name = user.name || user.email || "User"
+  const name = user.name || user.email || t("user")
   const email = user.email || ""
   const fallback = initials(user)
 
@@ -90,17 +92,17 @@ export function NavUser({ user }: NavUserProps) {
             <DropdownMenuGroup>
               <DropdownMenuItem render={<Link href="/account" />}>
                 <CircleUser />
-                Account
+                {t("account")}
               </DropdownMenuItem>
               <DropdownMenuItem render={<Link href="/admin" />}>
                 <Settings />
-                Settings
+                {t("settings")}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => signOut()}>
               <LogOut />
-              Sign out
+              {t("signOut")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

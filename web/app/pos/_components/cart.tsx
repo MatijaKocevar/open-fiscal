@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useTranslations } from "next-intl"
 import { useCart } from "@/stores/cart"
 import { checkout, validateTaxNumber } from "../_actions"
 import { showError, showSuccess } from "@/lib/toast-error"
@@ -16,6 +17,7 @@ interface Props {
 }
 
 export function PosCart({ customers }: Props) {
+  const t = useTranslations("pos")
   const { items, customerId, customerVatId, removeItem, updateQuantity, clear, setCustomer, setCustomerVatId } = useCart()
   const router = useRouter()
   const [loading, setLoading] = useState(false)
@@ -58,7 +60,7 @@ export function PosCart({ customers }: Props) {
     return { ...item, net, vat, gross }
   })
 
-  const { totalNet, totalVat, totalGross } = sumTotals(lineItems)
+  const { totalNet, totalGross } = sumTotals(lineItems)
   const vatBreakdown = sumVatBreakdown(lineItems.map(i => ({ ...i, rate: i.vatRate })))
 
   function handleCustomerChange(id: string | null) {
@@ -92,7 +94,7 @@ export function PosCart({ customers }: Props) {
     setLoading(false)
 
     if (result.ok) {
-      showSuccess("Invoice fiscalized!")
+      showSuccess(t("invoiceFiscalized"))
       clear()
       router.push(`/invoices/${result.data.invoiceId}`)
     } else {
@@ -103,11 +105,11 @@ export function PosCart({ customers }: Props) {
   return (
     <Card>
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg">Cart</CardTitle>
+        <CardTitle className="text-lg">{t("cart")}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         {items.length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-4">Cart is empty</p>
+          <p className="text-sm text-muted-foreground text-center py-4">{t("cartEmpty")}</p>
         ) : (
           <>
             <div className="space-y-2 max-h-96 overflow-y-auto">
@@ -140,11 +142,11 @@ export function PosCart({ customers }: Props) {
 
             <div className="space-y-2 border-t pt-2">
               <div className="space-y-1">
-                <label className="text-xs font-medium">Customer</label>
+                <label className="text-xs font-medium">{t("customer")}</label>
                 <Select value={customerId ?? "none"} onValueChange={handleCustomerChange}>
-                  <SelectTrigger><SelectValue placeholder="Walk-in" /></SelectTrigger>
+                  <SelectTrigger><SelectValue placeholder={t("walkIn")} /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="none">Walk-in</SelectItem>
+                    <SelectItem value="none">{t("walkIn")}</SelectItem>
                     {customers.map((c) => (
                       <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
                     ))}
@@ -152,44 +154,44 @@ export function PosCart({ customers }: Props) {
                 </Select>
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-medium">Tax number (if requested)</label>
+                <label className="text-xs font-medium">{t("taxNumber")}</label>
                 <Input
                   value={customerVatId}
                   onChange={(e) => setCustomerVatId(e.target.value)}
-                  placeholder="Optional — for B2B invoice"
+                  placeholder={t("taxPlaceholder")}
                 />
                 {customerVatId && vatStatus === "checking" && (
-                  <p className="text-xs text-muted-foreground">Checking…</p>
+                  <p className="text-xs text-muted-foreground">{t("checking")}</p>
                 )}
                 {customerVatId && vatStatus === "valid" && (
                   <p className="text-xs text-green-600">
-                    ✓ Valid{vatInfo?.name ? ` — ${vatInfo.name}` : ""}
+                    {t("valid")}{vatInfo?.name ? ` — ${vatInfo.name}` : ""}
                   </p>
                 )}
                 {customerVatId && vatStatus === "invalid" && (
-                  <p className="text-xs text-red-500">✗ Invalid tax number</p>
+                  <p className="text-xs text-red-500">{t("invalidTaxNumber")}</p>
                 )}
               </div>
             </div>
 
             <div className="border-t pt-2 space-y-1 text-sm">
               <div className="flex justify-between">
-                <span>Net</span>
+                <span>{t("net")}</span>
                 <span className="tabular-nums">{totalNet.toFixed(2)} €</span>
               </div>
               {vatBreakdown.map((v) => (
                 <div key={v.rate} className="flex justify-between text-muted-foreground">
-                  <span>VAT {v.rate}%</span>
+                  <span>{t("vatRate", { rate: v.rate })}</span>
                   <span className="tabular-nums">{v.vat.toFixed(2)} €</span>
                 </div>
               ))}
               <div className="flex justify-between font-bold text-base pt-1 border-t">
-                <span>TOTAL</span>
+                <span>{t("total")}</span>
                 <span className="tabular-nums">{totalGross.toFixed(2)} €</span>
               </div>
             </div>
             <Button className="w-full" onClick={handleCheckout} disabled={loading}>
-              {loading ? "Fiscalizing..." : `Pay ${totalGross.toFixed(2)} €`}
+              {loading ? t("fiscalizing") : t("pay", { amount: totalGross.toFixed(2) })}
             </Button>
           </>
         )}

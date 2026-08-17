@@ -1,13 +1,15 @@
+import { getTranslations } from "next-intl/server"
 import { getAllCustomers } from "@/lib/queries/customers"
 import Link from "next/link"
 
 export async function CustomerList() {
+  const t = await getTranslations("customers")
   const customers = await getAllCustomers()
 
   if (customers.length === 0) {
     return (
       <div className="text-center py-12 text-muted-foreground border rounded-lg">
-        No customers. Add first customer.
+        {t("noCustomers")}
       </div>
     )
   }
