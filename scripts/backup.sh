@@ -2,8 +2,8 @@
 set -e
 
 BACKUP_DIR="./backups"
-DB_NAME="${DB_NAME:-dpr_fiscal}"
-DB_USER="${DB_USER:-dpr}"
+DB_NAME="${DB_NAME:-openfiscal}"
+DB_USER="${DB_USER:-openfiscal}"
 TIMESTAMP=$(date -u +%Y%m%dT%H%M%SZ)
 
 mkdir -p "$BACKUP_DIR"

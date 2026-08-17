@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "=== DPR Fiscal Dev Setup ==="
+echo "=== OpenFiscal Dev Setup ==="
 
 echo "Starting PostgreSQL..."
 docker compose -f docker-compose.dev.yml up -d postgres

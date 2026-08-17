@@ -2,14 +2,14 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: ${DB_NAME:-dpr_fiscal}
-      POSTGRES_USER: ${DB_USER:-dpr}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-dpr_secret}
+      POSTGRES_DB: ${DB_NAME:-openfiscal}
+      POSTGRES_USER: ${DB_USER:-openfiscal}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-openfiscal_secret}
     ports: ["127.0.0.1:5432:5432"]
     volumes:
       - pgdata-dev:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "${DB_USER:-dpr}"]
+      test: ["CMD", "pg_isready", "-U", "${DB_USER:-openfiscal}"]
       interval: 10s
       retries: 5
 

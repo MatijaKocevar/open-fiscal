@@ -3,7 +3,7 @@ import { PrismaPg } from "@prisma/adapter-pg"
 import pg from "pg"
 import bcrypt from "bcryptjs"
 
-const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL || "postgresql://dpr:dpr_secret@localhost:5432/dpr_fiscal" })
+const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL || "postgresql://openfiscal:openfiscal_secret@localhost:5432/openfiscal" })
 const adapter = new PrismaPg(pool)
 const db = new PrismaClient({ adapter })
 

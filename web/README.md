@@ -1,6 +1,6 @@
 # web
 
-Next.js 16 App Router frontend for the DPR Fiscal Invoice application: point-of-sale,
+Next.js 16 App Router frontend for OpenFiscal: point-of-sale,
 invoices, products, customers, schedule, reports, and admin.
 
 ## Prerequisites
@@ -19,7 +19,7 @@ npx prisma migrate dev
 Create `.env` (see root `.env.example`). Minimum required:
 
 ```env
-DATABASE_URL=postgresql://dpr:dpr_secret@localhost:5432/dpr_fiscal
+DATABASE_URL=postgresql://openfiscal:openfiscal_secret@localhost:5432/openfiscal
 AUTH_SECRET=<random string>
 BRIDGE_URL=http://localhost:5100
 ```

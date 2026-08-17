@@ -1,4 +1,4 @@
-# DPR Fiscal Invoice
+# OpenFiscal
 
 Point-of-sale and fiscal-invoice application for the Slovenian tax authority (FURS).
 Consists of a Next.js web app and a C# fiscalization bridge.
@@ -12,7 +12,7 @@ Consists of a Next.js web app and a C# fiscalization bridge.
 | `furs-bridge-tests/` | xUnit tests for the bridge |
 | `certs/` | TLS certificates (gitignored, mounted into the bridge) |
 | `scripts/` | Setup, dev, backup, restore scripts |
-| `docs/` | DPR technical specification |
+| `docs/` | FURS technical specification |
 
 ## Prerequisites
 

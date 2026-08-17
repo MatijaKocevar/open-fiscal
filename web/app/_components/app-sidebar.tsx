@@ -46,7 +46,7 @@ export function AppSidebar() {
         <div className="flex items-center gap-2 px-3 py-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
           <ReceiptText className="size-5 shrink-0" />
           <span className="font-semibold text-sm group-data-[collapsible=icon]:hidden">
-            DPR Fiscal
+            OpenFiscal
           </span>
         </div>
       </SidebarHeader>

@@ -41,7 +41,7 @@ export default function SetupPage() {
         <CardContent className="space-y-4">
           {step === 0 && (
             <div className="text-center space-y-4">
-              <h2 className="text-xl font-bold">Welcome to DPR Fiscal</h2>
+              <h2 className="text-xl font-bold">Welcome to OpenFiscal</h2>
               <p className="text-muted-foreground">
                 Set up your company, tax data, SMTP for sending invoices, and FURS connection.
               </p>

@@ -6,8 +6,8 @@ import { AppShell } from "./_components/app-shell"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "DPR Fiscal",
-  description: "DPR Fiscal Invoice Management",
+  title: "OpenFiscal",
+  description: "OpenFiscal invoice management",
   manifest: "/manifest.json",
 }
 

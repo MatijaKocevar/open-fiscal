@@ -1,4 +1,4 @@
-# AGENTS.md — DPR Fiscal Invoice
+# AGENTS.md — OpenFiscal
 
 ## Quick start
 ```bash
@@ -12,7 +12,7 @@ company_app/
 ├── furs-bridge/       C# .NET 8 Minimal API — FURS fiscalization
 ├── web/               Next.js 16 App Router — UI + business logic
 ├── certs/             TLS certificates (gitignored, mounted to bridge)
-├── docs/              DPR technical spec PDF
+├── docs/              FURS technical spec PDF
 └── scripts/           backup, restore, setup
 ```
 
