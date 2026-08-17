@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
 import { SessionProvider } from "next-auth/react"
 import { Toaster } from "@/components/ui/sonner"
-import { AppSidebar } from "./_components/app-sidebar"
+import { TooltipProvider } from "@/components/ui/tooltip"
+import { AppShell } from "./_components/app-shell"
 import "./globals.css"
 
 export const metadata: Metadata = {
@@ -15,12 +16,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen bg-background antialiased">
         <SessionProvider>
-          <div className="flex h-screen">
-            <AppSidebar />
-            <main className="flex-1 overflow-y-auto p-6">
-              {children}
-            </main>
-          </div>
+          <TooltipProvider>
+            <AppShell>{children}</AppShell>
+          </TooltipProvider>
           <Toaster />
         </SessionProvider>
       </body>
