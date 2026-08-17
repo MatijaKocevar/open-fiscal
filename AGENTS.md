@@ -1,5 +1,10 @@
 # AGENTS.md — OpenFiscal
 
+## Autonomy
+- Never act on your own — no commits, pushes, branches, PRs, installs, or edits unless the user explicitly asks.
+- Create a PR only when the user explicitly asks (never automatically after finishing a change).
+- Commit only when the user asks.
+
 ## Quick start
 ```bash
 make setup-dev        # first time: docker, npm install, dotnet restore, prisma migrate

@@ -8,6 +8,11 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
+## Autonomy
+- Never act on your own — no commits, pushes, branches, PRs, installs, or edits unless the user explicitly asks.
+- Create a PR only when the user explicitly asks (never automatically after finishing a change).
+- Commit only when the user asks.
+
 ## Git workflow
 - Never commit directly to `main` — always work on a feature branch.
 - Branch from `main`: `git fetch origin && git checkout -b <type>/<slug> origin/main`
