@@ -1,8 +1,8 @@
-.PHONY: dev setup build backup restore
+.PHONY: dev setup build up down backup restore db-migrate db-studio lint typecheck test bridge clean
 
 dev:
 	docker compose -f docker-compose.dev.yml up -d postgres
-	cd web && npm run dev
+	./scripts/dev.sh
 
 setup:
 	./scripts/setup-dev.sh
