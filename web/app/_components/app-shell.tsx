@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator"
 import { AppSidebar } from "./app-sidebar"
 import { Breadcrumbs } from "./breadcrumbs"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { LocaleSwitcher } from "@/components/locale-switcher"
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -26,7 +27,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="mr-2 h-4" />
           <Breadcrumbs />
-          <div className="ml-auto">
+          <div className="ml-auto flex items-center gap-2">
+            <LocaleSwitcher />
             <ThemeToggle />
           </div>
         </header>

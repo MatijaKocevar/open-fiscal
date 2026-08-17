@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server"
 import { getVatSummary, getPaymentBreakdown } from "@/lib/queries/reports"
 import { StatCards } from "./_components/stat-cards"
 import { VatSummaryCard } from "./_components/vat-summary-card"
@@ -6,6 +7,7 @@ import { PaymentBreakdownCard } from "./_components/payment-breakdown-card"
 export const dynamic = "force-dynamic"
 
 export default async function ReportsPage() {
+  const t = await getTranslations("reports")
   const now = new Date()
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate())
@@ -18,7 +20,7 @@ export default async function ReportsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Reports</h1>
+      <h1 className="text-2xl font-bold">{t("title")}</h1>
 
       <StatCards
         todayGross={today.totalGross}

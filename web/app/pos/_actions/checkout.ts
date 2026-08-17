@@ -5,11 +5,14 @@ import { InvoiceCreateSchema } from "@/schemas/invoice"
 import { sendInvoiceToBridge } from "@/lib/bridge"
 import { sumTotals } from "@/lib/vat"
 import { revalidatePath } from "next/cache"
+import { getActionTranslations } from "@/lib/i18n"
+import { safeParseLocalized } from "@/lib/zod-i18n"
 
 export async function checkout(formData: unknown) {
-  const parsed = InvoiceCreateSchema.safeParse(formData)
+  const t = await getActionTranslations("errors")
+  const parsed = await safeParseLocalized(InvoiceCreateSchema, "invoice", formData)
   if (!parsed.success) {
-    return { ok: false as const, error: parsed.error.issues[0]?.message || "Invalid data" }
+    return { ok: false as const, error: parsed.error.issues[0]?.message }
   }
 
   const { paymentMethod, customerId, customerVatId, items } = parsed.data
@@ -21,7 +24,7 @@ export async function checkout(formData: unknown) {
   const premise = await db.premise.findFirst({ where: { isActive: true } })
 
   if (!company || !device || !premise) {
-    return { ok: false as const, error: "Account not fully configured. Visit settings." }
+    return { ok: false as const, error: t("accountNotConfigured") }
   }
 
   const lastInvoice = await db.invoice.findFirst({ orderBy: { invoiceNumber: "desc" } })
@@ -84,7 +87,7 @@ export async function checkout(formData: unknown) {
 
     return { ok: true as const, data: { invoiceId: invoice.id, invoiceNumber } }
   } catch (error) {
-    const msg = error instanceof Error ? error.message : "Fiscalization error"
+    const msg = error instanceof Error ? error.message : t("fiscalizationError")
     return { ok: false as const, error: msg }
   }
 }

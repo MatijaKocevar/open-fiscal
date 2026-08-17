@@ -3,12 +3,14 @@
 import { useState } from "react"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { showError } from "@/lib/toast-error"
 
 export default function LoginPage() {
+  const t = useTranslations("login")
   const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -27,7 +29,7 @@ export default function LoginPage() {
     setLoading(false)
 
     if (result?.error) {
-      showError("Wrong email or password")
+      showError(t("wrongCredentials"))
     } else if (result?.ok) {
       router.push("/")
     }
@@ -38,12 +40,12 @@ export default function LoginPage() {
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
           <CardTitle className="text-xl">OpenFiscal</CardTitle>
-          <p className="text-sm text-muted-foreground">Sign in to your account</p>
+          <p className="text-sm text-muted-foreground">{t("signIn")}</p>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Email</label>
+              <label className="text-sm font-medium">{t("email")}</label>
               <Input
                 type="email"
                 value={email}
@@ -53,7 +55,7 @@ export default function LoginPage() {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Password</label>
+              <label className="text-sm font-medium">{t("password")}</label>
               <Input
                 type="password"
                 value={password}
@@ -63,7 +65,7 @@ export default function LoginPage() {
               />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Login..." : "Login"}
+              {loading ? t("loggingIn") : t("login")}
             </Button>
           </form>
         </CardContent>

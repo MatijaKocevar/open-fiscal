@@ -1,5 +1,6 @@
 import jsPDF from "jspdf"
 import "jspdf-autotable"
+import { getTranslations } from "next-intl/server"
 import { generateQrDataUrl, buildQrContent } from "./qr"
 
 export interface ReceiptData {
@@ -22,7 +23,9 @@ export interface ReceiptData {
   verifyUrl?: string
 }
 
-export async function generateReceiptPdf(data: ReceiptData): Promise<Buffer> {
+export async function generateReceiptPdf(data: ReceiptData, locale: string): Promise<Buffer> {
+  const t = await getTranslations({ locale, namespace: "receipt" })
+  const tp = await getTranslations({ locale, namespace: "paymentMethods" })
   const doc = new jsPDF({ unit: "mm", format: [80, 200] })
   let y = 10
 
@@ -34,10 +37,10 @@ export async function generateReceiptPdf(data: ReceiptData): Promise<Buffer> {
   y += 4
   doc.text(data.companyCity, 40, y, { align: "center" })
   y += 4
-  doc.text(`Davčna št.: ${data.companyTaxNumber}`, 40, y, { align: "center" })
+  doc.text(t("taxNo", { tax: data.companyTaxNumber }), 40, y, { align: "center" })
   y += 6
 
-  doc.text(`Račun št: ${data.invoiceNumber}`, 5, y)
+  doc.text(t("invoiceNo", { number: data.invoiceNumber }), 5, y)
   doc.text(data.issueDateTime, 75, y, { align: "right" })
   y += 4
   doc.text(`EOR: ${data.eor}`, 5, y)
@@ -53,7 +56,7 @@ export async function generateReceiptPdf(data: ReceiptData): Promise<Buffer> {
 
   ;(doc as any).autoTable({
     startY: y,
-    head: [["Naziv", "Kol x Cena", "ZNESEK"]],
+    head: [[t("itemHead"), t("qtyPriceHead"), t("amountHead")]],
     body: rows,
     theme: "plain",
     styles: { fontSize: 6, cellPadding: 1 },
@@ -64,12 +67,12 @@ export async function generateReceiptPdf(data: ReceiptData): Promise<Buffer> {
   y = (doc as any).lastAutoTable.finalY + 3
 
   doc.setFontSize(8)
-  doc.text(`SKUPAJ: ${data.totalGross.toFixed(2)} EUR`, 75, y, { align: "right" })
+  doc.text(t("total", { amount: data.totalGross.toFixed(2) }), 75, y, { align: "right" })
   y += 4
   doc.setFontSize(6)
-  doc.text(`DDV: ${data.totalVat.toFixed(2)} EUR`, 75, y, { align: "right" })
+  doc.text(t("vat", { amount: data.totalVat.toFixed(2) }), 75, y, { align: "right" })
   y += 4
-  doc.text(`Plačilo: ${data.paymentMethod}`, 5, y)
+  doc.text(t("payment", { method: tp.has(data.paymentMethod) ? tp(data.paymentMethod) : data.paymentMethod }), 5, y)
   y += 6
 
   const qrContent = buildQrContent({

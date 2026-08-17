@@ -4,11 +4,12 @@ import bcrypt from "bcryptjs"
 import { db } from "@/lib/db"
 import { redirect } from "next/navigation"
 import { SetupCompleteSchema } from "@/schemas/settings"
+import { safeParseLocalized } from "@/lib/zod-i18n"
 
 export async function completeSetup(formData: unknown) {
-  const parsed = SetupCompleteSchema.safeParse(formData)
+  const parsed = await safeParseLocalized(SetupCompleteSchema, "settings", formData)
   if (!parsed.success) {
-    return { ok: false as const, error: parsed.error.issues[0]?.message || "Invalid data" }
+    return { ok: false as const, error: parsed.error.issues[0]?.message }
   }
 
   const data = parsed.data

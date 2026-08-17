@@ -4,6 +4,7 @@ import * as React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useSession } from "next-auth/react"
+import { useTranslations } from "next-intl"
 import {
   CalendarDays,
   LayoutDashboard,
@@ -25,53 +26,54 @@ import {
 import { NavMain, type NavMainItem } from "./nav-main"
 import { NavUser } from "./nav-user"
 
-const baseNav: NavMainItem[] = [
-  { title: "Dashboard", url: "/", icon: LayoutDashboard },
-  {
-    title: "Sales",
-    url: "/pos",
-    icon: ShoppingCart,
-    items: [
-      { title: "POS", url: "/pos" },
-      { title: "Invoices", url: "/invoices" },
-      { title: "Customers", url: "/customers" },
-    ],
-  },
-  {
-    title: "Catalog",
-    url: "/products",
-    icon: Package,
-    items: [
-      { title: "Products", url: "/products" },
-      { title: "New product", url: "/products/new" },
-    ],
-  },
-  {
-    title: "Operations",
-    url: "/schedule",
-    icon: CalendarDays,
-    items: [
-      { title: "Schedule", url: "/schedule" },
-      { title: "Reports", url: "/reports" },
-    ],
-  },
-]
-
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const t = useTranslations("nav")
   const pathname = usePathname()
   const { data: session } = useSession()
   const isOwner = session?.user?.role === "OWNER"
 
+  const baseNav: NavMainItem[] = [
+    { title: t("dashboard"), url: "/", icon: LayoutDashboard },
+    {
+      title: t("sales"),
+      url: "/pos",
+      icon: ShoppingCart,
+      items: [
+        { title: t("pos"), url: "/pos" },
+        { title: t("invoices"), url: "/invoices" },
+        { title: t("customers"), url: "/customers" },
+      ],
+    },
+    {
+      title: t("catalog"),
+      url: "/products",
+      icon: Package,
+      items: [
+        { title: t("products"), url: "/products" },
+        { title: t("newProduct"), url: "/products/new" },
+      ],
+    },
+    {
+      title: t("operations"),
+      url: "/schedule",
+      icon: CalendarDays,
+      items: [
+        { title: t("schedule"), url: "/schedule" },
+        { title: t("reports"), url: "/reports" },
+      ],
+    },
+  ]
+
   const navMain: NavMainItem[] = [
     ...baseNav,
     {
-      title: "Settings",
+      title: t("settings"),
       url: "/admin",
       icon: Settings,
       items: isOwner
         ? [
-            { title: "General", url: "/admin" },
-            { title: "Users", url: "/admin/users" },
+            { title: t("general"), url: "/admin" },
+            { title: t("users"), url: "/admin/users" },
           ]
         : undefined,
     },
@@ -88,7 +90,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">OpenFiscal</span>
-                <span className="truncate text-xs">Invoicing</span>
+                <span className="truncate text-xs">{t("invoicing")}</span>
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>

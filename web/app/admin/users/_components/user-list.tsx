@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { useTranslations } from "next-intl"
 import { toggleUserActive } from "../_actions"
 import { showError, showSuccess } from "@/lib/toast-error"
 
@@ -16,13 +17,16 @@ interface Props {
 }
 
 export function UserList({ users }: Props) {
+  const t = useTranslations("users")
+  const tr = useTranslations("roles")
+
   async function handleToggle(userId: string) {
     const result = await toggleUserActive(userId)
-    if (result.ok) showSuccess("Status updated")
+    if (result.ok) showSuccess(t("statusUpdated"))
     else showError(result.error)
   }
 
-  if (users.length === 0) return <p className="text-sm text-muted-foreground">No users.</p>
+  if (users.length === 0) return <p className="text-sm text-muted-foreground">{t("noUsers")}</p>
 
   return (
     <div className="border rounded-lg divide-y">
@@ -33,9 +37,9 @@ export function UserList({ users }: Props) {
             <span className="ml-2 text-xs text-muted-foreground">{user.email}</span>
           </div>
           <div className="flex items-center gap-2">
-            <Badge variant="secondary" className="text-xs">{user.role}</Badge>
+            <Badge variant="secondary" className="text-xs">{tr.has(user.role) ? tr(user.role) : user.role}</Badge>
             <Badge variant={user.isActive ? "default" : "destructive"} className="text-xs">
-              {user.isActive ? "Active" : "Disabled"}
+              {user.isActive ? t("active") : t("disabled")}
             </Badge>
             <Button
               variant="ghost"
@@ -43,7 +47,7 @@ export function UserList({ users }: Props) {
               className="text-xs h-7"
               onClick={() => handleToggle(user.id)}
             >
-              {user.isActive ? "Disable" : "Enable"}
+              {user.isActive ? t("disable") : t("enable")}
             </Button>
           </div>
         </div>

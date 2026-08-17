@@ -3,6 +3,7 @@
 import { Fragment } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useTranslations } from "next-intl"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,34 +13,37 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 
-const LABELS: Record<string, string> = {
-  pos: "POS",
-  invoices: "Invoices",
-  products: "Products",
-  customers: "Customers",
-  schedule: "Schedule",
-  reports: "Reports",
-  admin: "Settings",
-  new: "New",
-  edit: "Edit",
-}
-
-function labelFor(segment: string): string {
-  return LABELS[segment] ?? segment.charAt(0).toUpperCase() + segment.slice(1)
+const SEGMENT_KEYS: Record<string, string> = {
+  pos: "pos",
+  invoices: "invoices",
+  products: "products",
+  customers: "customers",
+  schedule: "schedule",
+  reports: "reports",
+  admin: "settings",
+  new: "new",
+  edit: "edit",
 }
 
 export function Breadcrumbs() {
+  const t = useTranslations("nav")
   const pathname = usePathname()
   const segments = pathname.split("/").filter(Boolean)
+
+  function labelFor(segment: string): string {
+    const key = SEGMENT_KEYS[segment]
+    if (key) return t(key)
+    return segment.charAt(0).toUpperCase() + segment.slice(1)
+  }
 
   return (
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
           {segments.length === 0 ? (
-            <BreadcrumbPage>Dashboard</BreadcrumbPage>
+            <BreadcrumbPage>{t("dashboard")}</BreadcrumbPage>
           ) : (
-            <BreadcrumbLink render={<Link href="/" />}>Dashboard</BreadcrumbLink>
+            <BreadcrumbLink render={<Link href="/" />}>{t("dashboard")}</BreadcrumbLink>
           )}
         </BreadcrumbItem>
         {segments.map((segment, i) => {

@@ -26,7 +26,7 @@ async function getSmtpConfig(): Promise<SmtpConfig | null> {
   }
 }
 
-export async function sendReceipt(to: string, subject: string, pdfBuffer: Buffer) {
+export async function sendReceipt(to: string, subject: string, text: string, pdfBuffer: Buffer) {
   const config = await getSmtpConfig()
   if (!config) throw new Error("SMTP not configured")
 
@@ -41,10 +41,10 @@ export async function sendReceipt(to: string, subject: string, pdfBuffer: Buffer
     from: config.from,
     to,
     subject,
-    text: "Prejmite vaš račun v priponki.",
+    text,
     attachments: [
       {
-        filename: `racun.pdf`,
+        filename: `invoice.pdf`,
         content: pdfBuffer,
         contentType: "application/pdf",
       },

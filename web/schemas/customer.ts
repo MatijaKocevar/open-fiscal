@@ -1,13 +1,13 @@
 import { z } from "zod"
 
 export const CustomerCreateSchema = z.object({
-  name: z.string().min(1, "Ime je obvezno"),
+  name: z.string().min(1),
   vatId: z.string().optional(),
   address: z.string().optional(),
   city: z.string().optional(),
   postalCode: z.string().optional(),
   phone: z.string().optional(),
-  email: z.string().email("Neveljaven email").optional().or(z.literal("")),
+  email: z.string().email().optional().or(z.literal("")),
 })
 
 export const CustomerUpdateSchema = CustomerCreateSchema.partial()

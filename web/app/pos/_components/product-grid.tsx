@@ -1,13 +1,15 @@
+import { getTranslations } from "next-intl/server"
 import { getAvailableProducts } from "@/lib/queries/products"
 import { ProductCard } from "./product-card"
 
 export async function ProductGrid() {
+  const t = await getTranslations("products")
   const products = await getAvailableProducts()
 
   if (products.length === 0) {
     return (
       <div className="text-center py-12 text-muted-foreground border rounded-lg">
-        No products. Add products to catalog.
+        {t("noProductsCatalog")}
       </div>
     )
   }
