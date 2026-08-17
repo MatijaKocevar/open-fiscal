@@ -9,6 +9,7 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { AppSidebar } from "./app-sidebar"
 import { Breadcrumbs } from "./breadcrumbs"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -21,12 +22,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <SidebarProvider className="h-svh">
       <AppSidebar />
       <SidebarInset>
-        <header className="flex h-12 shrink-0 items-center gap-2 border-b px-4">
-          <SidebarTrigger />
-          <Separator orientation="vertical" className="h-4" />
+        <header className="flex h-16 shrink-0 items-center gap-2 px-4">
+          <SidebarTrigger className="-ml-1" />
+          <Separator orientation="vertical" className="mr-2 h-4" />
           <Breadcrumbs />
+          <div className="ml-auto">
+            <ThemeToggle />
+          </div>
         </header>
-        <div className="flex-1 overflow-y-auto p-6">{children}</div>
+        <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-4 pt-0">
+          {children}
+        </div>
       </SidebarInset>
     </SidebarProvider>
   )
