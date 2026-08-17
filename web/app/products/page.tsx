@@ -1,46 +1,9 @@
 import { Suspense } from "react"
-import { getAvailableProducts } from "@/lib/queries/products"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
+import { Skeleton } from "@/components/ui/skeleton"
+import { ProductList } from "./_components/product-list"
 
 export const dynamic = "force-dynamic"
-
-async function ProductList() {
-  const products = await getAvailableProducts()
-
-  if (products.length === 0) {
-    return (
-      <div className="text-center py-12 text-muted-foreground border rounded-lg">
-        No products. Add first product.
-      </div>
-    )
-  }
-
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-      {products.map((product) => (
-        <Link key={product.id} href={`/products/${product.id}`}>
-          <Card className="hover:bg-accent/50 transition-colors h-full">
-            <CardContent className="p-4">
-              <div className="font-medium">{product.name}</div>
-              <div className="flex items-center justify-between mt-2">
-                <span className="text-lg font-bold tabular-nums">
-                  {Number(product.unitPrice).toFixed(2)} €
-                </span>
-                <Badge variant="secondary">VAT {Number(product.vatRate)}%</Badge>
-              </div>
-              <div className="text-xs text-muted-foreground mt-1">
-                Stock: {Number(product.stockQty)} {product.unit}
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-      ))}
-    </div>
-  )
-}
 
 export default function ProductsPage() {
   return (
