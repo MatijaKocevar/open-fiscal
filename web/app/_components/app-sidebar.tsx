@@ -1,94 +1,90 @@
 "use client"
 
+import * as React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useSession, signOut } from "next-auth/react"
+import { useSession } from "next-auth/react"
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import {
-  BarChart3,
   CalendarDays,
   LayoutDashboard,
   Package,
   ReceiptText,
   Settings,
   ShoppingCart,
-  Users,
 } from "lucide-react"
 
-const navItems = [
-  { href: "/", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/pos", label: "POS", icon: ShoppingCart },
-  { href: "/invoices", label: "Invoices", icon: ReceiptText },
-  { href: "/products", label: "Products", icon: Package },
-  { href: "/customers", label: "Customers", icon: Users },
-  { href: "/schedule", label: "Schedule", icon: CalendarDays },
-  { href: "/reports", label: "Reports", icon: BarChart3 },
-  { href: "/admin", label: "Settings", icon: Settings },
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar"
+import { NavMain, type NavMainItem } from "./nav-main"
+import { NavUser } from "./nav-user"
+
+const navMain: NavMainItem[] = [
+  { title: "Dashboard", url: "/", icon: LayoutDashboard },
+  {
+    title: "Sales",
+    url: "/pos",
+    icon: ShoppingCart,
+    items: [
+      { title: "POS", url: "/pos" },
+      { title: "Invoices", url: "/invoices" },
+      { title: "Customers", url: "/customers" },
+    ],
+  },
+  {
+    title: "Catalog",
+    url: "/products",
+    icon: Package,
+    items: [
+      { title: "Products", url: "/products" },
+      { title: "New product", url: "/products/new" },
+    ],
+  },
+  {
+    title: "Operations",
+    url: "/schedule",
+    icon: CalendarDays,
+    items: [
+      { title: "Schedule", url: "/schedule" },
+      { title: "Reports", url: "/reports" },
+    ],
+  },
+  { title: "Settings", url: "/admin", icon: Settings },
 ]
 
-export function AppSidebar() {
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname()
   const { data: session } = useSession()
 
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar variant="inset" collapsible="icon" {...props}>
       <SidebarHeader>
-        <div className="flex items-center gap-2 px-3 py-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
-          <ReceiptText className="size-5 shrink-0" />
-          <span className="font-semibold text-sm group-data-[collapsible=icon]:hidden">
-            OpenFiscal
-          </span>
-        </div>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton size="lg" render={<Link href="/" />}>
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                <ReceiptText className="size-4" />
+              </div>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-medium">OpenFiscal</span>
+                <span className="truncate text-xs">Invoicing</span>
+              </div>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navItems.map((item) => {
-                const active =
-                  item.href === "/"
-                    ? pathname === "/"
-                    : pathname.startsWith(item.href)
-                return (
-                  <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton
-                      isActive={active}
-                      tooltip={item.label}
-                      render={<Link href={item.href} />}
-                    >
-                      <item.icon />
-                      <span>{item.label}</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        <NavMain items={navMain} pathname={pathname} />
       </SidebarContent>
-      {session?.user && (
-        <SidebarFooter>
-          <div className="px-2 py-1 text-xs text-muted-foreground group-data-[collapsible=icon]:hidden">
-            <p className="truncate">{session.user.email}</p>
-            <button
-              onClick={() => signOut()}
-              className="text-primary hover:underline mt-1"
-            >
-              Sign out
-            </button>
-          </div>
-        </SidebarFooter>
-      )}
+      <SidebarFooter>
+        {session?.user ? <NavUser user={session.user} /> : null}
+      </SidebarFooter>
     </Sidebar>
   )
 }
