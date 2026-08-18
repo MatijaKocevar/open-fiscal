@@ -1,6 +1,9 @@
-using Bridge.Services;
+using System.Security.Cryptography.X509Certificates;
+using FursBridge.Interfaces;
+using FursBridge.Services;
+using FursBridge.Services.Mock;
 
-namespace Bridge.Extensions;
+namespace FursBridge.Extensions;
 
 public static class ServiceCollectionExtensions
 {
@@ -20,19 +23,19 @@ public static class ServiceCollectionExtensions
             var certPassword = config.GetValue<string>("CERT_PASSWORD", "");
 
             services.AddSingleton<ICertificateManager, CertificateManager>();
-            var certManager = new CertificateManager(
-                services.BuildServiceProvider().GetRequiredService<ILogger<CertificateManager>>());
-            var cert = certManager.LoadCertificate($"{certPath}/app-cert.pfx", certPassword);
 
-            if (cert == null)
-                throw new InvalidOperationException(
-                    $"Cannot load application certificate from {certPath}/app-cert.pfx");
+            services.AddSingleton<X509Certificate2>(sp =>
+            {
+                var certManager = sp.GetRequiredService<ICertificateManager>();
+                return certManager.LoadCertificate($"{certPath}/app-cert.pfx", certPassword)
+                    ?? throw new InvalidOperationException(
+                        $"Cannot load application certificate from {certPath}/app-cert.pfx");
+            });
 
-            services.AddSingleton(cert);
             services.AddSingleton<IZoiCalculator>(sp =>
-                new ZoiCalculator(sp.GetRequiredService<System.Security.Cryptography.X509Certificates.X509Certificate2>()));
+                new ZoiCalculator(sp.GetRequiredService<X509Certificate2>()));
             services.AddSingleton<IJwsSigner>(sp =>
-                new JwsSigner(sp.GetRequiredService<System.Security.Cryptography.X509Certificates.X509Certificate2>()));
+                new JwsSigner(sp.GetRequiredService<X509Certificate2>()));
 
             services.AddHttpClient<IFursClient, FursClient>(client =>
             {

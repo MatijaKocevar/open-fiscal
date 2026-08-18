@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Bridge.Models;
+namespace FursBridge.Models;
 
 public class InvoiceResponse
 {

@@ -1,4 +1,4 @@
-namespace Bridge.Services;
+namespace FursBridge.Interfaces;
 
 public interface IZoiCalculator
 {

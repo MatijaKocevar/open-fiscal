@@ -1,7 +1,7 @@
 using System.Text.Json;
-using Bridge.Services;
+using FursBridge.Exceptions;
 
-namespace Bridge.Middleware;
+namespace FursBridge.Middleware;
 
 public class ExceptionHandlingMiddleware
 {

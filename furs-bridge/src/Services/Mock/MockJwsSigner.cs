@@ -1,4 +1,6 @@
-namespace Bridge.Services;
+using FursBridge.Interfaces;
+
+namespace FursBridge.Services.Mock;
 
 public class MockJwsSigner : IJwsSigner
 {
