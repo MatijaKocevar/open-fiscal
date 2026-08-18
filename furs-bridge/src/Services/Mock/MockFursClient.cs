@@ -1,11 +1,11 @@
-using Bridge.Models;
+using FursBridge.Interfaces;
+using FursBridge.Models;
 
-namespace Bridge.Services;
+namespace FursBridge.Services.Mock;
 
 public class MockFursClient : IFursClient
 {
     private int _counter;
-    private readonly DateTime _start = new(2026, 1, 1);
 
     public Task<InvoiceResponse> SendInvoice(InvoiceRequest request, CancellationToken ct = default)
     {
@@ -67,5 +67,3 @@ public class MockFursClient : IFursClient
         });
     }
 }
-
-public class MockInvoiceResponseProvider { }

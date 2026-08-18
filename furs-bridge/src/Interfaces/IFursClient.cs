@@ -1,6 +1,6 @@
-using Bridge.Models;
+using FursBridge.Models;
 
-namespace Bridge.Services;
+namespace FursBridge.Interfaces;
 
 public interface IFursClient
 {

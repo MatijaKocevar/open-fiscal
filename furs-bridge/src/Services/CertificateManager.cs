@@ -1,14 +1,7 @@
 using System.Security.Cryptography.X509Certificates;
+using FursBridge.Interfaces;
 
-namespace Bridge.Services;
-
-public interface ICertificateManager
-{
-    X509Certificate2? LoadCertificate(string certPath, string? password);
-    bool ValidateCertificate(X509Certificate2 cert);
-    string GetTaxNumber(X509Certificate2 cert);
-    bool IsExpiringSoon(X509Certificate2 cert, int daysThreshold = 30);
-}
+namespace FursBridge.Services;
 
 public class CertificateManager : ICertificateManager
 {

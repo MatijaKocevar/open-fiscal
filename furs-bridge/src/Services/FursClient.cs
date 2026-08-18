@@ -1,8 +1,10 @@
 using System.Text;
 using System.Text.Json;
-using Bridge.Models;
+using FursBridge.Exceptions;
+using FursBridge.Interfaces;
+using FursBridge.Models;
 
-namespace Bridge.Services;
+namespace FursBridge.Services;
 
 public class FursClient : IFursClient
 {
@@ -113,15 +115,3 @@ public class FursClient : IFursClient
         return JsonSerializer.Deserialize<DailyReportResponse>(body)!;
     }
 }
-
-public class FursApiException : Exception
-{
-    public string Code { get; }
-
-    public FursApiException(string code, string message) : base(message)
-    {
-        Code = code;
-    }
-}
-
-public class FursApiExceptions { }

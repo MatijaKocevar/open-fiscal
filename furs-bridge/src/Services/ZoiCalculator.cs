@@ -1,8 +1,9 @@
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using FursBridge.Interfaces;
 
-namespace Bridge.Services;
+namespace FursBridge.Services;
 
 public class ZoiCalculator : IZoiCalculator
 {
