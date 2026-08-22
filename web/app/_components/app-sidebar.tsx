@@ -6,9 +6,7 @@ import { usePathname } from "next/navigation"
 import { useSession } from "next-auth/react"
 import { useTranslations } from "next-intl"
 import {
-  CalendarDays,
   LayoutDashboard,
-  Package,
   ReceiptText,
   Settings,
   ShoppingCart,
@@ -41,24 +39,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       items: [
         { title: t("pos"), url: "/pos" },
         { title: t("invoices"), url: "/invoices" },
-        { title: t("customers"), url: "/customers" },
-      ],
-    },
-    {
-      title: t("catalog"),
-      url: "/products",
-      icon: Package,
-      items: [
         { title: t("products"), url: "/products" },
-        { title: t("newProduct"), url: "/products/new" },
-      ],
-    },
-    {
-      title: t("operations"),
-      url: "/schedule",
-      icon: CalendarDays,
-      items: [
-        { title: t("schedule"), url: "/schedule" },
+        { title: t("customers"), url: "/customers" },
         { title: t("reports"), url: "/reports" },
       ],
     },

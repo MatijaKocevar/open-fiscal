@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { signOut } from "next-auth/react"
 import { useTranslations } from "next-intl"
-import { ChevronsUpDown, CircleUser, LogOut, Settings } from "lucide-react"
+import { ChevronsUpDown, CircleUser, LogOut } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -93,10 +93,6 @@ export function NavUser({ user }: NavUserProps) {
               <DropdownMenuItem render={<Link href="/account" />}>
                 <CircleUser />
                 {t("account")}
-              </DropdownMenuItem>
-              <DropdownMenuItem render={<Link href="/admin" />}>
-                <Settings />
-                {t("settings")}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
